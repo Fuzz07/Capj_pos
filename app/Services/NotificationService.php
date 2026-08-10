@@ -285,9 +285,13 @@ class NotificationService
             $curlErr  = curl_error($ch);
             curl_close($ch);
 
-            if ($curlErr === '') {
+            if ($curlErr !== '') {
+                Log::error("Gmail OAuth token request failed: {$curlErr}");
+            } else {
                 $data = json_decode($response, true);
-                if (!empty($data['access_token'])) {
+                if (empty($data['access_token'])) {
+                    Log::error("Gmail OAuth token response missing access_token: " . substr((string) $response, 0, 300));
+                } else {
                     $accessToken = $data['access_token'];
 
                     if (function_exists('mb_encode_mimeheader')) {
@@ -332,16 +336,18 @@ class NotificationService
                     if ($httpCode >= 200 && $httpCode < 300 && !empty($sendData['id'])) {
                         return true;
                     }
+                    Log::error("Gmail API send failed (HTTP {$httpCode}): " . substr((string) $sendResponse, 0, 300));
                 }
             }
         }
 
-        // Fallback to Laravel Mailer
+        // Fallback to Laravel Mailer. The 'log' and 'array' mailers only swallow
+        // the message for debugging, so they must not be reported as delivered.
         try {
             \Illuminate\Support\Facades\Mail::html($body, function ($message) use ($toEmail, $toName, $subject) {
                 $message->to($toEmail, $toName)->subject($subject);
             });
-            return true;
+            return !in_array(config('mail.default'), ['log', 'array'], true);
         } catch (\Exception $e) {
             Log::error("Mail fallback send error: " . $e->getMessage());
         }

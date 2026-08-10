@@ -74,6 +74,24 @@
         border-radius: 8px;
         border: 2px solid #0057a3;
     }
+
+    /* Mobile & portrait tablets: cart stacks under the product grid */
+    @media (max-width: 991.98px) {
+        .sticky-top-filters {
+            position: static;
+            padding-bottom: 0.5rem;
+        }
+        .sticky-cart-sidebar {
+            position: static;
+            max-height: none;
+        }
+        .cart-container {
+            height: auto;
+        }
+        .cart-items-scroll {
+            max-height: 45vh;
+        }
+    }
 </style>
 @endpush
 

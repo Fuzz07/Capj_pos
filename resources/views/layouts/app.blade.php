@@ -203,20 +203,32 @@
             display: none;
         }
         
-        @media (max-width: 768px) {
+        /* Mobile & portrait tablets: off-canvas sidebar with hamburger */
+        @media (max-width: 991.98px) {
+            body {
+                display: block;
+                height: auto;
+                min-height: 100vh;
+            }
             .sidebar {
-                left: -230px;
+                left: -250px;
+                width: 240px;
                 transition: left 0.3s;
             }
             .sidebar.show {
                 left: 0;
+                box-shadow: 4px 0 25px rgba(0, 0, 0, 0.35);
             }
             .main-content {
                 margin-left: 0;
                 width: 100%;
+                padding: 4rem 1rem 1.5rem 1rem;
+                overflow-y: visible;
             }
             .hamburger {
-                display: block;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 position: fixed;
                 top: 10px;
                 left: 10px;
@@ -224,8 +236,11 @@
                 background: #f10000;
                 color: white;
                 border: none;
-                padding: 10px;
-                border-radius: 5px;
+                width: 42px;
+                height: 42px;
+                font-size: 1.15rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
             }
             .sidebar-overlay.show {
                 display: block;
@@ -236,6 +251,20 @@
                 height: 100%;
                 background: rgba(0,0,0,0.5);
                 z-index: 999;
+            }
+        }
+
+        /* Small phones: tighter paddings, stack page headers */
+        @media (max-width: 575.98px) {
+            .main-content {
+                padding: 3.75rem 0.6rem 1.25rem 0.6rem;
+            }
+            .main-content .container-fluid.px-4 {
+                padding-left: 0.35rem !important;
+                padding-right: 0.35rem !important;
+            }
+            .main-content h3 {
+                font-size: 1.25rem;
             }
         }
 
@@ -254,6 +283,8 @@
         .pagination {
             justify-content: center !important;
             margin: 0.25rem 0 0 0 !important;
+            flex-wrap: wrap;
+            row-gap: 0.3rem;
         }
     </style>
 

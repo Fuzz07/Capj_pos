@@ -95,5 +95,7 @@ Route::middleware('auth')->group(function () {
 // PayMongo Webhook Endpoint
 Route::post('/webhooks/paymongo', [PaymentController::class, 'handleWebhook'])->name('webhooks.paymongo');
 
-// Public Email Verification Route
-Route::get('/verify-email/{token}', [AuthController::class, 'verifyEmail'])->name('email.verify');
+// Public Email Verification Routes (OTP code entry — kept outside 'guest'
+// middleware so the form still opens when another account is signed in)
+Route::get('/verify-email', [AuthController::class, 'showVerifyEmail'])->name('email.verify');
+Route::post('/verify-email', [AuthController::class, 'verifyEmailOtp'])->name('email.verify.submit');

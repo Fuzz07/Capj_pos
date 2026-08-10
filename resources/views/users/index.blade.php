@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid px-4">
     <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
         <div>
             <h3 class="fw-bold m-0 text-dark">User Management</h3>
             <p class="text-secondary small m-0">Control administrator and staff access permissions.</p>
@@ -65,12 +65,12 @@
                             @if(!empty($u->email) && !$u->email_verified_at)
                                 <form action="{{ route('users.verify', $u->id) }}" method="POST" class="d-inline">
                                     @csrf
-                                    <button type="submit" class="btn btn-sm btn-outline-info me-1 py-1 px-2 fw-semibold" style="font-size: 0.75rem;" title="Send Email Verification Link">
+                                    <button type="submit" class="btn btn-sm btn-outline-info me-1 py-1 px-2 fw-semibold" style="font-size: 0.75rem;" title="Send Verification OTP Code to this Email">
                                         <i class="fa-solid fa-paper-plane me-1"></i>
                                         @if(empty($u->email_verification_token))
-                                            Send Verify
+                                            Send OTP
                                         @else
-                                            Resend Verify
+                                            Resend OTP
                                         @endif
                                     </button>
                                 </form>

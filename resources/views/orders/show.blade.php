@@ -18,6 +18,7 @@
         .receipt-card {
             background: #ffffff;
             width: 320px;
+            max-width: 100%;
             padding: 20px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;

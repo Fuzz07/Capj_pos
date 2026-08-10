@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid px-4 py-2" style="max-width: 1100px;">
     <!-- Page Title Header -->
-    <div class="d-flex align-items-center justify-content-between mb-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
         <div>
             <h3 class="fw-bold m-0 text-dark d-flex align-items-center">
                 <i class="fa-solid fa-user-gear text-primary me-2 fs-3"></i> Account Profile
@@ -112,7 +112,7 @@
         </div>
 
         <!-- Landscape Action Footer Bar -->
-        <div class="mt-4 card card-custom p-3 shadow-sm border-0 d-flex flex-row align-items-center justify-content-between">
+        <div class="mt-4 card card-custom p-3 shadow-sm border-0 d-flex flex-row flex-wrap align-items-center justify-content-between gap-2">
             <span class="small text-muted"><i class="fa-solid fa-circle-info text-primary me-1"></i> Make sure to review all changes before saving.</span>
             <button type="submit" class="btn btn-primary fw-bold px-4 py-2 shadow-sm">
                 <i class="fa-solid fa-floppy-disk me-2"></i> Save Account Changes

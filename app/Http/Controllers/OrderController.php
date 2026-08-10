@@ -22,7 +22,7 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized action.');
+            return redirect()->route('orders.index')->with('error', 'Access denied. Only administrators can delete orders.');
         }
         $order->items()->delete();
         $order->delete();

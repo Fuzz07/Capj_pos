@@ -395,6 +395,130 @@
     .chart-modal-close:hover {
       color: #0f172a;
     }
+
+    /* Tablet landscape / small desktop: relax the 6-column KPI row */
+    @media (max-width: 1200px) {
+      .kpi-row {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Mobile & portrait tablets: switch from fit-one-screen to normal scrolling page */
+    @media (max-width: 991.98px) {
+      body,
+      html {
+        overflow: auto !important;
+      }
+
+      .main-content {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible !important;
+        justify-content: flex-start;
+        gap: 0.75rem;
+        padding: 4rem 1rem 1.5rem 1rem !important;
+      }
+
+      .dashboard-top-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+      }
+
+      .filter-bar {
+        flex-wrap: wrap;
+        padding: 0.5rem;
+      }
+
+      .filter-group {
+        flex: 1 1 45%;
+      }
+
+      .filter-group input {
+        width: 100%;
+        padding: 0.35rem 0.4rem;
+        font-size: 0.8rem;
+      }
+
+      .btn-filter,
+      .btn-clear {
+        flex: 1 1 auto;
+        text-align: center;
+        padding: 0.4rem 0.6rem;
+      }
+
+      .kpi-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .kpi-label {
+        font-size: 0.6rem;
+      }
+
+      .kpi-value {
+        font-size: 0.95rem;
+      }
+
+      .kpi-footer {
+        font-size: 0.6rem;
+      }
+
+      .chart-row-flex {
+        grid-template-columns: 1fr;
+        flex: none;
+      }
+
+      .chart-container h6 {
+        font-size: 0.85rem;
+      }
+
+      .chart-canvas-wrapper {
+        height: 240px;
+        min-height: 240px;
+        flex: none;
+      }
+
+      .panels-grid {
+        flex: none;
+      }
+
+      .data-panel table {
+        font-size: 0.78rem;
+      }
+
+      .data-panel .panel-header {
+        font-size: 0.72rem;
+      }
+
+      .table-wrapper {
+        max-height: 280px;
+      }
+
+      .footer-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+        font-size: 0.72rem;
+      }
+
+      .chart-modal-content {
+        width: 95vw;
+        height: 70vh;
+        padding: 1rem;
+      }
+    }
+
+    /* Small phones */
+    @media (max-width: 575.98px) {
+      .main-content {
+        padding: 3.75rem 0.6rem 1.25rem 0.6rem !important;
+      }
+
+      .chart-canvas-wrapper {
+        height: 210px;
+        min-height: 210px;
+      }
+    }
   </style>
 @endpush
 

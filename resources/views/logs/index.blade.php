@@ -13,7 +13,7 @@
 @endpush
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
         <div>
             <h4 class="fw-bold m-0"><i class="fa-solid fa-list-check me-2 text-primary"></i> User Activity Logs</h4>
             <p class="text-muted small m-0">Track all user transactions, order activities, inventory updates, and logins.
@@ -25,7 +25,7 @@
     </div>
 
     <div class="card border-0 shadow-sm p-3">
-        <div class="mb-3 d-flex justify-content-between align-items-center">
+        <div class="mb-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
             <input type="text" id="logSearch" class="form-control form-control-sm"
                 placeholder="Search logs (e.g. ORDER, INVENTORY, admin)..." style="max-width: 320px;">
             <span class="text-muted small">Showing {{ $logs->count() }} of {{ $logs->total() }} entries</span>

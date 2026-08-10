@@ -173,25 +173,53 @@ class AuthController extends Controller
         return redirect()->route('login')->with('status', 'Password reset successful! Please log in.');
     }
 
-    public function verifyEmail($token)
+    public function showVerifyEmail(Request $request)
     {
-        $user = User::where('email_verification_token', $token)->first();
+        return view('auth.verify-account', ['email' => $request->query('email', '')]);
+    }
+
+    public function verifyEmailOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'otp' => 'required|string|size:6',
+        ]);
+
+        $user = User::where('email', $request->email)
+                    ->whereNull('email_verified_at')
+                    ->where('email_verification_token', $request->otp)
+                    ->first();
 
         if (!$user) {
-            return redirect()->route('login')->withErrors(['token' => 'Invalid or expired email verification token.']);
+            return view('auth.verify-account', ['email' => $request->email])
+                ->withErrors(['otp' => 'Invalid OTP code. Please check your email and try again.']);
+        }
+
+        if ($user->email_verification_expires_at && now()->greaterThan($user->email_verification_expires_at)) {
+            return view('auth.verify-account', ['email' => $request->email])
+                ->withErrors(['otp' => 'This OTP code has expired. Please ask your administrator to resend a new verification code.']);
         }
 
         $user->update([
             'email_verified_at' => now(),
             'email_verification_token' => null,
+            'email_verification_expires_at' => null,
         ]);
 
         ActivityLog::create([
             'user_id' => $user->id,
             'action' => 'EMAIL_VERIFIED',
-            'description' => "User account email verified successfully: {$user->username}"
+            'description' => "User account email verified successfully via OTP: {$user->username}"
         ]);
 
-        return redirect()->route('login')->with('status', 'Email verified successfully! You can now log in.');
+        // Clear any active session so verification never lands on the dashboard —
+        // the user must always sign in from the login page after verifying.
+        if (Auth::check()) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
+
+        return redirect()->route('login')->with('status', 'Email verified successfully! Please log in with your username and password.');
     }
 }

@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
         <div>
             <h3 class="fw-bold m-0 text-dark">Notifications</h3>
             <p class="text-secondary small m-0">System alerts including low stock warnings.</p>

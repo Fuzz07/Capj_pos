@@ -5,7 +5,7 @@
 @section('content')
     <div class="container-fluid px-4">
         <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
             <div>
                 <h3 class="fw-bold m-0 text-dark">Inventory Management</h3>
                 <p class="text-secondary small m-0">Track product stock levels, pricing, and active menu items.</p>
