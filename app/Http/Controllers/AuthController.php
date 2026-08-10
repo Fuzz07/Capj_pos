@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -26,9 +27,20 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
+        // Limit to 3 failed attempts per username+IP, then lock for 10 minutes
+        $throttleKey = Str::transliterate(strtolower($credentials['username']) . '|' . $request->ip());
+
+        if (RateLimiter::tooManyAttempts($throttleKey, 3)) {
+            $minutes = (int) ceil(RateLimiter::availableIn($throttleKey) / 60);
+            return back()->withErrors([
+                'username' => "Too many failed login attempts. Please wait {$minutes} " . ($minutes === 1 ? 'minute' : 'minutes') . " before trying again.",
+            ])->onlyInput('username');
+        }
+
         if (Auth::attempt(['username' => $credentials['username'], 'password' => $credentials['password']], $request->boolean('remember'))) {
+            RateLimiter::clear($throttleKey);
             $request->session()->regenerate();
-            
+
             ActivityLog::create([
                 'user_id' => Auth::id(),
                 'action' => 'USER_LOGIN',
@@ -39,8 +51,13 @@ class AuthController extends Controller
             return redirect()->route($targetRoute);
         }
 
+        RateLimiter::hit($throttleKey, 600);
+        $remaining = RateLimiter::remaining($throttleKey, 3);
+
         return back()->withErrors([
-            'username' => 'Invalid username or password credentials.',
+            'username' => $remaining > 0
+                ? "Invalid username or password credentials. You have {$remaining} " . ($remaining === 1 ? 'attempt' : 'attempts') . " remaining."
+                : 'Too many failed login attempts. Login is now locked — please wait 10 minutes before trying again.',
         ])->onlyInput('username');
     }
 

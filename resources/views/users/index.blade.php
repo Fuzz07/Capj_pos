@@ -95,7 +95,7 @@
 
                             <!-- Modal: Edit User -->
                             <div class="modal fade" id="editUserModal{{ $u->id }}" tabindex="-1">
-                                <div class="modal-dialog modal-dialog-centered text-start">
+                                <div class="modal-dialog modal-dialog-centered modal-lg text-start">
                                     <form action="{{ route('users.update', $u->id) }}" method="POST">
                                         @csrf
                                         @method('PUT')
@@ -105,28 +105,30 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <div class="mb-3">
-                                                    <label class="form-label small fw-semibold text-secondary">Username</label>
-                                                    <input type="text" name="username" class="form-control" value="{{ $u->username }}" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label small fw-semibold text-secondary">Full Name</label>
-                                                    <input type="text" name="full_name" class="form-control" value="{{ $u->full_name }}">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label small fw-semibold text-secondary">Email Address</label>
-                                                    <input type="email" name="email" class="form-control" value="{{ $u->email }}">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label small fw-semibold text-secondary">Role</label>
-                                                    <select name="role" class="form-select" required>
-                                                        <option value="staff" {{ $u->role === 'staff' ? 'selected' : '' }}>Staff</option>
-                                                        <option value="admin" {{ $u->role === 'admin' ? 'selected' : '' }}>Administrator</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label small fw-semibold text-secondary">New Password (leave blank to keep unchanged)</label>
-                                                    <input type="password" name="password" class="form-control" placeholder="••••••••">
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label small fw-semibold text-secondary">Username</label>
+                                                        <input type="text" name="username" class="form-control" value="{{ $u->username }}" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label small fw-semibold text-secondary">Full Name</label>
+                                                        <input type="text" name="full_name" class="form-control" value="{{ $u->full_name }}">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label small fw-semibold text-secondary">Email Address</label>
+                                                        <input type="email" name="email" class="form-control" value="{{ $u->email }}">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label small fw-semibold text-secondary">Role</label>
+                                                        <select name="role" class="form-select" required>
+                                                            <option value="staff" {{ $u->role === 'staff' ? 'selected' : '' }}>Staff</option>
+                                                            <option value="admin" {{ $u->role === 'admin' ? 'selected' : '' }}>Administrator</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label small fw-semibold text-secondary">New Password (leave blank to keep unchanged)</label>
+                                                        <input type="password" name="password" class="form-control" placeholder="••••••••">
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -154,9 +156,9 @@
     </div>
 </div>
 
-<!-- Modal: Add New User -->
+<!-- Modal: Add New User (landscape two-column on desktop, stacked on mobile) -->
 <div class="modal fade" id="addUserModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <form action="{{ route('users.store') }}" method="POST">
             @csrf
             <div class="modal-content">
@@ -165,28 +167,30 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label small fw-semibold text-secondary">Username</label>
-                        <input type="text" name="username" class="form-control" placeholder="e.g. staff1" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-semibold text-secondary">Full Name</label>
-                        <input type="text" name="full_name" class="form-control" placeholder="e.g. Maria Santos">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-semibold text-secondary">Email Address</label>
-                        <input type="email" name="email" class="form-control" placeholder="staff@captainj.com">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-semibold text-secondary">Role</label>
-                        <select name="role" class="form-select" required>
-                            <option value="staff" selected>Staff</option>
-                            <option value="admin">Administrator</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-semibold text-secondary">Password</label>
-                        <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold text-secondary">Username</label>
+                            <input type="text" name="username" class="form-control" placeholder="e.g. staff1" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold text-secondary">Full Name</label>
+                            <input type="text" name="full_name" class="form-control" placeholder="e.g. Maria Santos">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold text-secondary">Email Address</label>
+                            <input type="email" name="email" class="form-control" placeholder="staff@captainj.com">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold text-secondary">Role</label>
+                            <select name="role" class="form-select" required>
+                                <option value="staff" selected>Staff</option>
+                                <option value="admin">Administrator</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold text-secondary">Password</label>
+                            <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
