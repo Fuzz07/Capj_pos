@@ -278,23 +278,68 @@
             }
         }
 
-        /* Centered Modern Pagination Override */
-        nav.d-flex.justify-content-between,
-        div.d-none.flex-sm-fill.d-sm-flex.align-items-sm-center.justify-content-sm-between,
-        div.d-sm-flex.align-items-sm-center.justify-content-sm-between {
-            flex-direction: column !important;
-            justify-content: center !important;
-            align-items: center !important;
-            gap: 0.5rem !important;
-            text-align: center !important;
-            width: 100% !important;
-            display: flex !important;
-        }
+        /* Pagination
+           Bootstrap's paginator ships two blocks: a compact prev/next for phones
+           and a full numbered one for larger screens. Only style them — never
+           force `display`, or both render at once and stack awkwardly. */
         .pagination {
-            justify-content: center !important;
-            margin: 0.25rem 0 0 0 !important;
+            justify-content: center;
+            margin: 0;
             flex-wrap: wrap;
-            row-gap: 0.3rem;
+            gap: 0.3rem;
+        }
+
+        .page-link {
+            border: 1px solid #e9edf2;
+            border-radius: 0.5rem;
+            color: #475569;
+            font-weight: 600;
+            font-size: 0.83rem;
+            line-height: 1.3;
+            min-width: 38px;
+            padding: 0.45rem 0.7rem;
+            text-align: center;
+            transition: all 0.15s ease-in-out;
+        }
+
+        .page-link:hover {
+            background-color: #fff1f1;
+            border-color: #f3b8b8;
+            color: #b30000;
+        }
+
+        .page-link:focus {
+            box-shadow: 0 0 0 3px rgba(241, 0, 0, 0.15);
+            color: #b30000;
+        }
+
+        .page-item.active .page-link {
+            background: linear-gradient(135deg, #ff1e1e 0%, #b30000 100%);
+            border-color: #b30000;
+            color: #ffffff;
+            box-shadow: 0 4px 10px -3px rgba(241, 0, 0, 0.45);
+        }
+
+        .page-item.disabled .page-link {
+            background-color: #f8fafc;
+            border-color: #eef2f7;
+            color: #cbd5e1;
+        }
+
+        /* "Showing 1 to 15 of 151 results" line */
+        nav[role="navigation"] p.small,
+        nav[role="navigation"] .text-muted {
+            margin-bottom: 0;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        @media (max-width: 575.98px) {
+            .page-link {
+                min-width: 34px;
+                padding: 0.4rem 0.55rem;
+                font-size: 0.78rem;
+            }
         }
     </style>
 

@@ -24,7 +24,61 @@ class SettingsController extends Controller
             'gmail_api' => !empty(config('pos.gmail.refresh_token')),
         ];
 
+        $mail['gmail_status'] = $this->gmailTokenStatus();
+
         return view('settings.index', compact('settings', 'mail'));
+    }
+
+    /**
+     * Ask Google whether the stored refresh token still works. Cached briefly so
+     * opening Settings does not hit the network on every request.
+     *
+     * @return array{state: string, message: string}
+     */
+    private function gmailTokenStatus(): array
+    {
+        $config = config('pos.gmail');
+
+        if (empty($config['refresh_token'])) {
+            return ['state' => 'missing', 'message' => 'No refresh token configured.'];
+        }
+
+        return \Illuminate\Support\Facades\Cache::remember('gmail_token_status', now()->addMinutes(5), function () use ($config) {
+            $ch = curl_init('https://oauth2.googleapis.com/token');
+            curl_setopt_array($ch, [
+                CURLOPT_POST => true,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT => 15,
+                CURLOPT_POSTFIELDS => http_build_query([
+                    'client_id' => $config['client_id'],
+                    'client_secret' => $config['client_secret'],
+                    'refresh_token' => $config['refresh_token'],
+                    'grant_type' => 'refresh_token',
+                ]),
+            ]);
+            $response = curl_exec($ch);
+            $curlErr = curl_error($ch);
+            curl_close($ch);
+
+            if ($curlErr !== '') {
+                return ['state' => 'unreachable', 'message' => 'Could not reach Google: ' . $curlErr];
+            }
+
+            $data = json_decode((string) $response, true);
+
+            if (!empty($data['access_token'])) {
+                return ['state' => 'ok', 'message' => 'Authorised and working.'];
+            }
+
+            if (($data['error'] ?? '') === 'invalid_grant') {
+                return [
+                    'state' => 'expired',
+                    'message' => 'The refresh token has expired or been revoked. Run "php artisan gmail:authorize" to generate a new one.',
+                ];
+            }
+
+            return ['state' => 'error', 'message' => 'Google rejected the credentials: ' . ($data['error'] ?? 'unknown error') . '.'];
+        });
     }
 
     public function update(Request $request)
@@ -57,6 +111,9 @@ class SettingsController extends Controller
         ]);
 
         Setting::put($validated);
+
+        // A saved change may follow a credential fix — re-check Gmail on next load
+        \Illuminate\Support\Facades\Cache::forget('gmail_token_status');
 
         ActivityLog::create([
             'user_id' => auth()->id(),
