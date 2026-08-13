@@ -27,10 +27,14 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        // Limit to 3 failed attempts per username+IP, then lock for 10 minutes
+        // Limit failed attempts per username+IP, then lock out (both configurable
+        // in Admin Panel -> Settings)
+        $maxAttempts = max(1, \App\Models\Setting::getInt('login_max_attempts', 3));
+        $lockoutSeconds = max(60, \App\Models\Setting::getInt('login_lockout_minutes', 10) * 60);
+
         $throttleKey = Str::transliterate(strtolower($credentials['username']) . '|' . $request->ip());
 
-        if (RateLimiter::tooManyAttempts($throttleKey, 3)) {
+        if (RateLimiter::tooManyAttempts($throttleKey, $maxAttempts)) {
             $minutes = (int) ceil(RateLimiter::availableIn($throttleKey) / 60);
             return back()->withErrors([
                 'username' => "Too many failed login attempts. Please wait {$minutes} " . ($minutes === 1 ? 'minute' : 'minutes') . " before trying again.",
@@ -51,13 +55,14 @@ class AuthController extends Controller
             return redirect()->route($targetRoute);
         }
 
-        RateLimiter::hit($throttleKey, 600);
-        $remaining = RateLimiter::remaining($throttleKey, 3);
+        RateLimiter::hit($throttleKey, $lockoutSeconds);
+        $remaining = RateLimiter::remaining($throttleKey, $maxAttempts);
+        $lockMinutes = (int) round($lockoutSeconds / 60);
 
         return back()->withErrors([
             'username' => $remaining > 0
                 ? "Invalid username or password credentials. You have {$remaining} " . ($remaining === 1 ? 'attempt' : 'attempts') . " remaining."
-                : 'Too many failed login attempts. Login is now locked — please wait 10 minutes before trying again.',
+                : "Too many failed login attempts. Login is now locked — please wait {$lockMinutes} " . ($lockMinutes === 1 ? 'minute' : 'minutes') . " before trying again.",
         ])->onlyInput('username');
     }
 

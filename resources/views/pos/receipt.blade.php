@@ -79,9 +79,18 @@
 <body onload="window.print()">
 
     <div class="receipt-card">
+        @php $shop = \App\Models\Setting::values(); @endphp
         <div class="text-center">
-            <h3 style="margin: 0;">CAPTAiN J</h3>
-            <p style="margin: 2px 0; font-size: 0.8rem;">POUR IT, SAVOR IT, LOVE IT</p>
+            <h3 style="margin: 0;">{{ $shop['shop_name'] }}</h3>
+            @if(!empty($shop['shop_tagline']))
+                <p style="margin: 2px 0; font-size: 0.8rem;">{{ $shop['shop_tagline'] }}</p>
+            @endif
+            @if(!empty($shop['shop_address']))
+                <p style="margin: 2px 0; font-size: 0.72rem;">{{ $shop['shop_address'] }}</p>
+            @endif
+            @if(!empty($shop['shop_contact']))
+                <p style="margin: 2px 0; font-size: 0.72rem;">Tel: {{ $shop['shop_contact'] }}</p>
+            @endif
             <p style="margin: 2px 0; font-size: 0.75rem;">Order #{{ $order->id }} |
                 {{ $order->created_at->format('Y-m-d H:i') }}</p>
         </div>
@@ -142,7 +151,7 @@
         <div class="dashed-line"></div>
 
         <div class="text-center" style="font-size: 0.8rem; margin-top: 10px;">
-            Thank you for visiting CAPTAiN J!<br>Please come again!
+            {{ $shop['receipt_footer'] ?: 'Thank you for your order!' }}
         </div>
 
         <div class="no-print">

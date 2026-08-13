@@ -142,9 +142,60 @@ class MailDiagnose extends Command
             return self::SUCCESS;
         }
 
+        $reason = NotificationService::$lastError ?: 'Unknown error.';
         $this->error('FAILED — the message was not delivered.');
-        $this->line('See storage/logs/laravel.log for the exact Gmail API error.');
+        $this->line('Reason: ' . $reason);
+        $this->explainSmtpFailure($reason);
+        $this->newLine();
+        $this->line('Full details are in storage/logs/laravel.log.');
         return self::FAILURE;
+    }
+
+    /**
+     * Turn the common (and cryptic) Gmail SMTP rejections into concrete steps.
+     */
+    private function explainSmtpFailure(string $reason): void
+    {
+        if (!str_contains($reason, 'SMTP')) {
+            return;
+        }
+
+        $this->newLine();
+
+        if (str_contains($reason, '535') || stripos($reason, 'BadCredentials') !== false || stripos($reason, 'Username and Password not accepted') !== false) {
+            $this->warn('Gmail rejected the username/password (535 BadCredentials).');
+            $this->line('Gmail does NOT accept your normal account password over SMTP.');
+            $this->line('You must use a 16-character App Password:');
+            $this->newLine();
+            $this->line('  1. Turn ON 2-Step Verification:');
+            $this->line('     https://myaccount.google.com/signinoptions/two-step-verification');
+            $this->line('     (App Passwords do not exist until 2-Step is enabled.)');
+            $this->line('  2. Create an App Password:');
+            $this->line('     https://myaccount.google.com/apppasswords');
+            $this->line('  3. Put it in .env as MAIL_PASSWORD, and make sure:');
+            $this->line('       MAIL_MAILER=smtp');
+            $this->line('       MAIL_HOST=smtp.gmail.com');
+            $this->line('       MAIL_PORT=587');
+            $this->line('       MAIL_ENCRYPTION=tls');
+            $this->line('       MAIL_USERNAME must be the SAME Gmail address that owns the App Password');
+            $this->line('  4. Run: php artisan config:clear');
+            $this->newLine();
+            $this->line('Also check: no surrounding quotes in .env, and MAIL_FROM_ADDRESS should');
+            $this->line('match MAIL_USERNAME — Gmail refuses to send as a different address.');
+            return;
+        }
+
+        if (stripos($reason, 'Connection could not be established') !== false || stripos($reason, 'timed out') !== false || stripos($reason, 'timeout') !== false) {
+            $this->warn('Could not open a connection to the SMTP server.');
+            $this->line('The host is likely blocking outbound SMTP. Try MAIL_PORT=465 with');
+            $this->line('MAIL_ENCRYPTION=ssl, or ask the host to open port 587.');
+            return;
+        }
+
+        if (stripos($reason, 'certificate') !== false || stripos($reason, 'SSL') !== false) {
+            $this->warn('TLS/SSL negotiation failed.');
+            $this->line('Check that MAIL_PORT and MAIL_ENCRYPTION agree: 587+tls, or 465+ssl.');
+        }
     }
 
     private function mask(string $value): string

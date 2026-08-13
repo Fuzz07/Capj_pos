@@ -18,8 +18,9 @@
             @endif
         </div>
         @php
+            $lowStockThreshold = \App\Models\Setting::getInt('low_stock_threshold', 5);
             $outOfStockCount = $items->filter(fn($i) => $i->stock_qty <= 0)->count();
-            $lowStockCount = $items->filter(fn($i) => $i->stock_qty >= 1 && $i->stock_qty <= 5)->count();
+            $lowStockCount = $items->filter(fn($i) => $i->stock_qty >= 1 && $i->stock_qty <= $lowStockThreshold)->count();
         @endphp
 
         @if($outOfStockCount > 0 || $lowStockCount > 0)
@@ -78,7 +79,7 @@
                         @forelse($items as $item)
                             @php
                                 $isOut = ($item->stock_qty <= 0);
-                                $isLow = ($item->stock_qty >= 1 && $item->stock_qty <= 5);
+                                $isLow = ($item->stock_qty >= 1 && $item->stock_qty <= $lowStockThreshold);
                             @endphp
                             <tr style="{{ $isOut ? 'background-color: #ffe4e6 !important;' : ($isLow ? 'background-color: #fff1f2 !important;' : '') }}">
                                 <td class="fw-bold text-secondary">#{{ $item->id }}</td>

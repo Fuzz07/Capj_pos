@@ -163,10 +163,12 @@ class UserController extends Controller
      */
     private function dispatchVerificationOtp(User $user): array
     {
-        // Always generate a fresh 6-digit OTP code on send/resend (valid for 10 minutes)
+        // Always generate a fresh 6-digit OTP code on send/resend. Lifetime is
+        // configurable in Admin Panel -> Settings.
+        $expiryMinutes = max(1, \App\Models\Setting::getInt('otp_expiry_minutes', 10));
         $otp = (string) random_int(100000, 999999);
         $user->email_verification_token = $otp;
-        $user->email_verification_expires_at = now()->addMinutes(10);
+        $user->email_verification_expires_at = now()->addMinutes($expiryMinutes);
         $user->save();
 
         // Send OTP verification email using our robust NotificationService method

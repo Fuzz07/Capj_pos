@@ -19,7 +19,7 @@ class PaymentController extends Controller
 
     public function gcashCheckout(Order $order)
     {
-        $gcashNumber = config('pos.gcash.number', '09536774000');
+        $gcashNumber = \App\Models\Setting::get('gcash_number', config('pos.gcash.number', '09536774000'));
         $qrImage = config('pos.gcash.qr_image', 'images/gcash-qr.jpg');
         return view('payments.gcash', compact('order', 'gcashNumber', 'qrImage'));
     }

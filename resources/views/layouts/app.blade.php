@@ -340,6 +340,9 @@
                     <a href="{{ route('logs.index') }}" class="{{ request()->routeIs('logs.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-list-check"></i> <span>Activity Logs</span>
                     </a>
+                    <a href="{{ route('settings.index') }}" class="{{ request()->routeIs('settings.*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-gear"></i> <span>Settings</span>
+                    </a>
                 @elseif(auth()->user()->role === 'staff')
                     <a href="{{ route('profile.edit') }}" class="{{ request()->routeIs('profile.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-id-card"></i> <span>Profile</span>

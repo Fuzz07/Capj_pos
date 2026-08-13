@@ -198,7 +198,7 @@
                             <span class="fw-semibold text-dark" id="subtotalDisplay">₱0.00</span>
                         </div>
                         <div class="d-flex justify-content-between small text-muted mb-1">
-                            <span>Take-out Fee (₱5 / 2 pcs)</span>
+                            <span>Take-out Fee (₱{{ rtrim(rtrim(number_format($takeoutFeeAmount, 2), '0'), '.') }} / {{ $takeoutFeePerItems }} pcs)</span>
                             <span class="fw-semibold text-dark" id="takeoutFeeDisplay">₱0.00</span>
                         </div>
                         <div class="d-flex justify-content-between fs-5 fw-bold text-dark my-2">
@@ -256,7 +256,10 @@
                 <div class="gcash-qr-box mb-3">
                     <p class="small fw-semibold text-primary mb-2">Scan QR Code using GCash App</p>
                     <img src="{{ asset('images/gcash-qr.jpg') }}" alt="GCash QR Code" class="img-fluid mb-2" onerror="this.src='{{ asset('images/capj.jpg') }}'">
-                    <p class="mb-0 fw-bold fs-5 text-dark">GCash #: <span class="text-primary">09536774000</span></p>
+                    <p class="mb-0 fw-bold fs-5 text-dark">GCash #: <span class="text-primary">{{ $gcashNumber }}</span></p>
+                    @if(!empty($gcashName))
+                        <p class="mb-0 small text-muted">{{ $gcashName }}</p>
+                    @endif
                 </div>
 
                 <div class="alert alert-info text-start small mb-3">
@@ -280,6 +283,10 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    // Take-out charging rule, configured in Admin Panel -> Settings
+    const TAKEOUT_FEE_AMOUNT = {{ (float) $takeoutFeeAmount }};
+    const TAKEOUT_FEE_PER_ITEMS = {{ max(1, (int) $takeoutFeePerItems) }};
+
     let cart = {};
 
     function addToCart(id, name, price, maxStock) {
@@ -373,7 +380,7 @@
         });
 
         const isTakeout = document.getElementById('orderType').value === 'Take-out';
-        const takeoutFee = isTakeout ? (Math.ceil(totalQty / 2) * 5) : 0.00;
+        const takeoutFee = isTakeout ? (Math.ceil(totalQty / TAKEOUT_FEE_PER_ITEMS) * TAKEOUT_FEE_AMOUNT) : 0.00;
         const total = subtotal + takeoutFee;
 
         return { subtotal, takeoutFee, total, totalQty };

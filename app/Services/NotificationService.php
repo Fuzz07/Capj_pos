@@ -11,7 +11,7 @@ class NotificationService
 {
     public static function checkAndNotifyLowStock(?Inventory $item = null): void
     {
-        $threshold = config('pos.low_stock_threshold', 5);
+        $threshold = \App\Models\Setting::getInt('low_stock_threshold', (int) config('pos.low_stock_threshold', 5));
 
         $query = Inventory::where('is_active', true)->where('stock_qty', '<=', $threshold);
         if ($item) {

@@ -24,7 +24,7 @@ class InventoryController extends Controller
 
         if ($request->filled('status')) {
             if ($request->status === 'low') {
-                $query->lowStock(config('pos.low_stock_threshold', 5));
+                $query->lowStock(\App\Models\Setting::getInt('low_stock_threshold', (int) config('pos.low_stock_threshold', 5)));
             } elseif ($request->status === 'inactive') {
                 $query->where('is_active', false);
             } elseif ($request->status === 'active') {

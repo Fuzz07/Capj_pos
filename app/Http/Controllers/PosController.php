@@ -6,6 +6,7 @@ use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ActivityLog;
+use App\Models\Setting;
 use App\Services\NotificationService;
 use Exception;
 use Illuminate\Http\Request;
@@ -39,7 +40,15 @@ class PosController extends Controller
 
         $items = Inventory::active()->orderBy('name')->get();
 
-        return view('pos.index', compact('items', 'categories'));
+        $takeoutFeeAmount = Setting::getFloat('takeout_fee_amount', 5);
+        $takeoutFeePerItems = max(1, Setting::getInt('takeout_fee_per_items', 2));
+        $gcashNumber = Setting::get('gcash_number', config('pos.gcash.number'));
+        $gcashName = Setting::get('gcash_name', '');
+
+        return view('pos.index', compact(
+            'items', 'categories',
+            'takeoutFeeAmount', 'takeoutFeePerItems', 'gcashNumber', 'gcashName'
+        ));
     }
 
     public function processOrder(Request $request)
@@ -85,7 +94,9 @@ class PosController extends Controller
 
             $takeoutFee = 0.00;
             if ($validated['order_type'] === 'Take-out') {
-                $takeoutFee = (float)(ceil($totalQty / 2) * 5);
+                $feeAmount = Setting::getFloat('takeout_fee_amount', 5);
+                $perItems = max(1, Setting::getInt('takeout_fee_per_items', 2));
+                $takeoutFee = (float) (ceil($totalQty / $perItems) * $feeAmount);
             }
             $totalAmount = $subtotal + $takeoutFee;
 
