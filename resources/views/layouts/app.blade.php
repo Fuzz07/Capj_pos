@@ -6,6 +6,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'CAPTAiN J POS System')</title>
 
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/capj.jpg') }}">
+
     <!-- Google Fonts & FontAwesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,14 +21,20 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
+        /* Keep horizontal bleed clipped at the viewport so the page itself stays
+           the vertical scroll container (inner scrolling breaks keyboard paging,
+           anchor links and window.scrollTo). */
+        html {
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f5f7f2;
             color: #2f3b2f;
             display: flex;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            overflow-x: hidden;
         }
 
         .sidebar {
@@ -192,7 +203,7 @@
             margin-left: 230px;
             padding: 2rem;
             width: calc(100% - 230px);
-            overflow-y: auto;
+            min-width: 0;
         }
 
         /* Mobile specific hamburger button (hidden on desktop) */
@@ -223,7 +234,6 @@
                 margin-left: 0;
                 width: 100%;
                 padding: 4rem 1rem 1.5rem 1rem;
-                overflow-y: visible;
             }
             .hamburger {
                 display: flex;

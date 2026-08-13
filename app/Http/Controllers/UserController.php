@@ -43,10 +43,20 @@ class UserController extends Controller
         ]);
 
         if (!empty($user->email)) {
-            if ($this->dispatchVerificationOtp($user)) {
-                return redirect()->route('users.index')->with('success', "User created! A verification OTP code has been sent to " . $user->email . ". Ask the user to also check their Spam folder.");
+            $result = $this->dispatchVerificationOtp($user);
+
+            if ($result['sent']) {
+                return redirect()->route('users.index')->with('success', "User created! A verification OTP code has been sent to {$user->email}. Ask the user to check their Inbox and Spam folder.");
             }
-            return redirect()->route('users.index')->with('error', "User was created, but the verification OTP email could not be sent to {$user->email}. Use the Resend OTP button to try again.");
+
+            return redirect()->route('users.index')
+                ->with('error', "User created, but email delivery failed: {$result['error']}")
+                ->with('manual_otp', [
+                    'user' => $user->full_name ?: $user->username,
+                    'email' => $user->email,
+                    'code' => $result['otp'],
+                    'expires' => optional($user->email_verification_expires_at)->format('g:i A'),
+                ]);
         }
 
         return redirect()->route('users.index')->with('success', 'User created successfully!');
@@ -85,10 +95,20 @@ class UserController extends Controller
         ]);
 
         if ($emailChanged && !empty($user->email)) {
-            if ($this->dispatchVerificationOtp($user)) {
-                return redirect()->route('users.index')->with('success', "User updated! A verification OTP code has been sent to " . $user->email . ". Ask the user to also check their Spam folder.");
+            $result = $this->dispatchVerificationOtp($user);
+
+            if ($result['sent']) {
+                return redirect()->route('users.index')->with('success', "User updated! A verification OTP code has been sent to {$user->email}. Ask the user to check their Inbox and Spam folder.");
             }
-            return redirect()->route('users.index')->with('error', "User was updated, but the verification OTP email could not be sent to {$user->email}. Use the Resend OTP button to try again.");
+
+            return redirect()->route('users.index')
+                ->with('error', "User updated, but email delivery failed: {$result['error']}")
+                ->with('manual_otp', [
+                    'user' => $user->full_name ?: $user->username,
+                    'email' => $user->email,
+                    'code' => $result['otp'],
+                    'expires' => optional($user->email_verification_expires_at)->format('g:i A'),
+                ]);
         }
 
         return redirect()->route('users.index')->with('success', 'User updated successfully!');
@@ -118,14 +138,30 @@ class UserController extends Controller
             return back()->with('error', 'This user does not have an email address configured.');
         }
 
-        if ($this->dispatchVerificationOtp($user)) {
-            return back()->with('success', "Verification OTP code sent successfully to " . $user->email . ". Ask the user to also check their Spam folder.");
+        $result = $this->dispatchVerificationOtp($user);
+
+        if ($result['sent']) {
+            return back()->with('success', "Verification OTP code sent to {$user->email}. Ask the user to check their Inbox and Spam folder.");
         }
 
-        return back()->with('error', "Failed to send the verification OTP code to {$user->email}. Please check the internet connection and mail settings, then use Resend OTP to try again.");
+        // Email is down, but the code is valid — let the admin hand it over directly
+        // so verification is never completely blocked.
+        return back()
+            ->with('error', "Email delivery failed: {$result['error']}")
+            ->with('manual_otp', [
+                'user' => $user->full_name ?: $user->username,
+                'email' => $user->email,
+                'code' => $result['otp'],
+                'expires' => optional($user->email_verification_expires_at)->format('g:i A'),
+            ]);
     }
 
-    private function dispatchVerificationOtp(User $user): bool
+    /**
+     * Generate a fresh OTP, store it, and try to email it.
+     *
+     * @return array{sent: bool, otp: string, error: ?string}
+     */
+    private function dispatchVerificationOtp(User $user): array
     {
         // Always generate a fresh 6-digit OTP code on send/resend (valid for 10 minutes)
         $otp = (string) random_int(100000, 999999);
@@ -170,18 +206,27 @@ class UserController extends Controller
         ";
 
         $sent = false;
+        $error = null;
+
         try {
             $sent = \App\Services\NotificationService::sendViaGmail($subject, $body, $user->email, $user->full_name ?: $user->username);
+            $error = \App\Services\NotificationService::$lastError;
         } catch (\Exception $e) {
+            $error = $e->getMessage();
             \Illuminate\Support\Facades\Log::error("Failed to send verification email: " . $e->getMessage());
         }
 
         ActivityLog::create([
             'user_id' => auth()->id(),
             'action' => $sent ? 'VERIFICATION_SENT' : 'VERIFICATION_SEND_FAILED',
-            'description' => ($sent ? "Sent email verification OTP code to user" : "Failed to send email verification OTP code to user") . ": {$user->username} ({$user->email})"
+            'description' => ($sent ? "Sent email verification OTP code to user" : "Failed to send email verification OTP code to user")
+                . ": {$user->username} ({$user->email})" . ($sent ? '' : ' — ' . $error)
         ]);
 
-        return $sent;
+        return [
+            'sent' => $sent,
+            'otp' => $otp,
+            'error' => $error ?: 'Unknown mail error. See storage/logs/laravel.log.',
+        ];
     }
 }

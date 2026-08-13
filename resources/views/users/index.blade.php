@@ -15,6 +15,30 @@
         </button>
     </div>
 
+    @if(session('manual_otp'))
+        @php $m = session('manual_otp'); @endphp
+        <div class="alert alert-warning border-0 shadow-sm rounded-3 mb-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <div>
+                    <h6 class="fw-bold mb-1"><i class="fa-solid fa-hand-holding-hand me-2"></i>Give this code to {{ $m['user'] }} directly</h6>
+                    <p class="small mb-0">
+                        The email to <strong>{{ $m['email'] }}</strong> did not go out, but the code below is active.
+                        Have them open <strong>{{ route('email.verify') }}</strong>, enter their email and this code
+                        @if($m['expires']) before <strong>{{ $m['expires'] }}</strong> @endif to finish verifying.
+                    </p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-white border rounded-3 px-4 py-2 shadow-sm">
+                        <span class="fw-bold text-dark" style="font-size: 1.8rem; letter-spacing: 0.4rem; font-family: monospace;">{{ $m['code'] }}</span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-light border mt-2 fw-semibold" onclick="navigator.clipboard.writeText('{{ $m['code'] }}'); this.innerHTML='<i class=&quot;fa-solid fa-check me-1&quot;></i> Copied';">
+                        <i class="fa-regular fa-copy me-1"></i> Copy code
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <!-- Users Table Card -->
     <div class="card card-custom p-4">
         <div class="table-responsive">
@@ -48,6 +72,12 @@
                                     <span class="badge bg-warning-subtle text-warning fw-semibold p-1 px-2">
                                         <i class="fa-solid fa-circle-question me-1"></i> Unverified
                                     </span>
+                                    @if($u->email_verification_token && $u->email_verification_expires_at && $u->email_verification_expires_at->isFuture())
+                                        <div class="small text-muted mt-1" style="font-size: 0.7rem;">
+                                            Code <span class="fw-bold text-dark" style="font-family: monospace; letter-spacing: 1px;">{{ $u->email_verification_token }}</span>
+                                            &middot; until {{ $u->email_verification_expires_at->format('g:i A') }}
+                                        </div>
+                                    @endif
                                 @endif
                             @else
                                 <span class="text-secondary small">N/A</span>

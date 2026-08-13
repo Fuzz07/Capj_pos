@@ -258,8 +258,15 @@ class NotificationService
         }
     }
 
+    /**
+     * Human-readable reason the most recent send failed, for surfacing in the UI.
+     */
+    public static ?string $lastError = null;
+
     public static function sendViaGmail(string $subject, string $body, string $toEmail, string $toName): bool
     {
+        self::$lastError = null;
+
         $config = config('pos.gmail');
         $clientId = $config['client_id'] ?? '';
         $clientSecret = $config['client_secret'] ?? '';
@@ -286,10 +293,16 @@ class NotificationService
             curl_close($ch);
 
             if ($curlErr !== '') {
+                self::$lastError = 'The server could not reach Google (' . $curlErr . ').';
                 Log::error("Gmail OAuth token request failed: {$curlErr}");
             } else {
                 $data = json_decode($response, true);
                 if (empty($data['access_token'])) {
+                    if (($data['error'] ?? '') === 'invalid_grant') {
+                        self::$lastError = 'The Gmail authorisation has expired (invalid_grant). Regenerate GMAIL_REFRESH_TOKEN, or switch to Gmail SMTP with an App Password.';
+                    } else {
+                        self::$lastError = 'Google rejected the mail credentials (' . ($data['error'] ?? 'unknown error') . ').';
+                    }
                     Log::error("Gmail OAuth token response missing access_token: " . substr((string) $response, 0, 300));
                 } else {
                     $accessToken = $data['access_token'];
@@ -336,6 +349,7 @@ class NotificationService
                     if ($httpCode >= 200 && $httpCode < 300 && !empty($sendData['id'])) {
                         return true;
                     }
+                    self::$lastError = "Gmail rejected the message (HTTP {$httpCode}).";
                     Log::error("Gmail API send failed (HTTP {$httpCode}): " . substr((string) $sendResponse, 0, 300));
                 }
             }
@@ -343,12 +357,24 @@ class NotificationService
 
         // Fallback to Laravel Mailer. The 'log' and 'array' mailers only swallow
         // the message for debugging, so they must not be reported as delivered.
+        $mailer = config('mail.default');
+
+        if (in_array($mailer, ['log', 'array'], true)) {
+            self::$lastError = ($mailer === 'log' || $mailer === 'array')
+                ? trim((self::$lastError ? self::$lastError . ' ' : '') . "No delivering mailer is configured (MAIL_MAILER={$mailer} only writes to the log). Set MAIL_MAILER=smtp with valid credentials.")
+                : self::$lastError;
+            Log::error("Mail not delivered: MAIL_MAILER={$mailer} does not send email.");
+            return false;
+        }
+
         try {
             \Illuminate\Support\Facades\Mail::html($body, function ($message) use ($toEmail, $toName, $subject) {
                 $message->to($toEmail, $toName)->subject($subject);
             });
-            return !in_array(config('mail.default'), ['log', 'array'], true);
+            self::$lastError = null;
+            return true;
         } catch (\Exception $e) {
+            self::$lastError = 'SMTP send failed: ' . $e->getMessage();
             Log::error("Mail fallback send error: " . $e->getMessage());
         }
 
