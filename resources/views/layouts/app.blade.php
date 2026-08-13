@@ -312,6 +312,9 @@
                     <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
                         <i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span>
                     </a>
+                    <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-chart-line"></i> <span>Sales &amp; Reports</span>
+                    </a>
                     <a href="{{ route('inventory.index') }}" class="{{ request()->routeIs('inventory.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-boxes-stacked"></i> <span>Inventory</span>
                     </a>

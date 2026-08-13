@@ -8,6 +8,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -67,6 +68,9 @@ Route::middleware('auth')->group(function () {
 
         // Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Sales & Reports (owner view)
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
         // Admin-Only Inventory Actions
         Route::post('/inventory', [InventoryController::class, 'store'])->name('inventory.store');
         Route::put('/inventory/{inventory}', [InventoryController::class, 'update'])->name('inventory.update');
