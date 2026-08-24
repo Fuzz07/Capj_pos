@@ -40,8 +40,10 @@
     /* Top Row: Title & Dates */
     .dashboard-top-bar {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
       flex-shrink: 0;
     }
 
@@ -55,6 +57,7 @@
     .filter-bar {
       display: flex;
       align-items: center;
+      margin-right: auto;
       gap: 0.5rem;
       background: #fff;
       border-radius: 6px;
@@ -423,6 +426,10 @@
         flex-direction: column;
         align-items: stretch;
         gap: 0.6rem;
+      }
+
+      .dashboard-top-bar .filter-bar {
+        margin-right: 0;
       }
 
       .filter-bar {

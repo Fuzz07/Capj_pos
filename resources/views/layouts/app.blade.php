@@ -28,6 +28,11 @@
             overflow-x: hidden;
         }
 
+        /* Height of the sticky top bar — sticky page elements offset from it */
+        :root {
+            --topbar-h: 52px;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f5f7f2;
@@ -134,7 +139,7 @@
             padding: 0.45rem 0.6rem;
             background: rgba(255, 255, 255, 0.12);
             border-radius: 8px;
-            margin-bottom: 0.6rem;
+            margin-bottom: 0;
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
@@ -174,29 +179,72 @@
             margin: 0;
         }
 
-        .btn-logout {
+        /* Top bar: sits above page content, holds the account actions on the right */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+            margin: -2rem -2rem 1.25rem -2rem;
+            padding: 0.55rem 1.25rem;
+            background: #ffffff;
+            border-bottom: 1px solid #e9edf2;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            width: 100%;
-            padding: 0.5rem 0.75rem;
-            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
-            color: #dc2626 !important;
-            font-weight: 700;
-            font-size: 0.8rem;
-            border-radius: 8px;
-            text-decoration: none;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15);
-            transition: all 0.2s ease-in-out;
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            justify-content: flex-end;
+            gap: 0.75rem;
+            min-height: var(--topbar-h);
         }
 
-        .btn-logout:hover {
-            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        .topbar-user {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            line-height: 1.1;
+            min-width: 0;
+        }
+
+        .topbar-user-label {
+            font-size: 0.58rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #94a3b8;
+        }
+
+        .topbar-user-name {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #0f172a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+        }
+
+        .btn-logout-top {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            padding: 0.45rem 0.95rem;
+            background: linear-gradient(135deg, #f10000 0%, #b30000 100%);
+            color: #ffffff !important;
+            font-weight: 700;
+            font-size: 0.78rem;
+            border-radius: 8px;
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 8px -2px rgba(220, 38, 38, 0.35);
+            transition: all 0.2s ease-in-out;
+            white-space: nowrap;
+        }
+
+        .btn-logout-top:hover {
+            background: linear-gradient(135deg, #b30000 0%, #7f0000 100%);
             color: #ffffff !important;
             transform: translateY(-1px);
-            box-shadow: 0 6px 12px -2px rgba(220, 38, 38, 0.4);
+            box-shadow: 0 6px 12px -2px rgba(220, 38, 38, 0.45);
         }
 
         .main-content {
@@ -235,6 +283,10 @@
                 width: 100%;
                 padding: 4rem 1rem 1.5rem 1rem;
             }
+            .topbar {
+                margin: -4rem -1rem 1rem -1rem;
+                padding-left: 62px;
+            }
             .hamburger {
                 display: flex;
                 align-items: center;
@@ -268,6 +320,14 @@
         @media (max-width: 575.98px) {
             .main-content {
                 padding: 3.75rem 0.6rem 1.25rem 0.6rem;
+            }
+            .topbar {
+                margin: -3.75rem -0.6rem 1rem -0.6rem;
+                padding-left: 60px;
+                padding-right: 0.7rem;
+            }
+            .topbar-user {
+                display: none;
             }
             .main-content .container-fluid.px-4 {
                 padding-left: 0.35rem !important;
@@ -413,15 +473,25 @@
                     <div class="user-badge-name">{{ auth()->user()->full_name ?? auth()->user()->username }}</div>
                 </div>
             </div>
-            <a href="/logout" class="btn-logout">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout
-            </a>
         </div>
     </div>
     @endauth
 
     <!-- Main Content -->
     <div class="main-content" @guest style="margin-left: 0; width: 100%;" @endguest>
+        @auth
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-user">
+                <span class="topbar-user-label">Logged in as</span>
+                <span class="topbar-user-name">{{ auth()->user()->full_name ?? auth()->user()->username }}</span>
+            </div>
+            <a href="/logout" class="btn-logout-top">
+                <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+            </a>
+        </header>
+        @endauth
+
         <!-- Global Alerts Container -->
         <div class="container-fluid px-4 mt-3">
             @if(session('success'))

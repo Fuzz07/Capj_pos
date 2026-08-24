@@ -30,17 +30,6 @@
         font-size: 0.75rem;
         color: #64748b;
     }
-    .mail-status-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        padding: 0.4rem 0;
-        border-bottom: 1px dashed #e2e8f0;
-        font-size: 0.85rem;
-    }
-    .mail-status-row:last-child { border-bottom: none; }
-    .mail-status-row .label { color: #64748b; font-weight: 600; }
-    .mail-status-row .value { color: #0f172a; font-weight: 600; text-align: right; word-break: break-all; }
 </style>
 @endpush
 
@@ -242,77 +231,12 @@
             <div class="settings-section-icon" style="background:#2563eb;"><i class="fa-solid fa-envelope-circle-check"></i></div>
             <div>
                 <p class="settings-section-title">Email &amp; OTP Delivery</p>
-                <span class="setting-hint">Status of the mail service used to send verification codes.</span>
+                <span class="setting-hint">Check that verification codes can be delivered.</span>
             </div>
         </div>
 
         <div class="row g-4">
-            <div class="col-12 col-lg-6">
-                @php
-                    $gmailOk = ($mail['gmail_status']['state'] ?? '') === 'ok';
-                    $smtpDelivers = !in_array($mail['mailer'], ['log', 'array'], true);
-                @endphp
-
-                @if($gmailOk)
-                    <div class="alert alert-success border-0 small py-2 mb-3">
-                        <i class="fa-solid fa-circle-check me-1"></i>
-                        <strong>Gmail API is authorised and working.</strong>
-                        All verification codes are sent through {{ $mail['from'] }}.
-                    </div>
-                @elseif(($mail['gmail_status']['state'] ?? '') === 'expired')
-                    <div class="alert alert-danger border-0 small py-2 mb-3">
-                        <i class="fa-solid fa-triangle-exclamation me-1"></i>
-                        <strong>Gmail authorisation expired.</strong>
-                        {{ $mail['gmail_status']['message'] }}
-                        @unless($smtpDelivers)
-                            No SMTP fallback is configured either, so verification emails cannot be delivered right now.
-                        @endunless
-                    </div>
-                @elseif($smtpDelivers)
-                    <div class="alert alert-warning border-0 small py-2 mb-3">
-                        <i class="fa-solid fa-triangle-exclamation me-1"></i>
-                        Gmail API unavailable ({{ $mail['gmail_status']['message'] ?? 'not configured' }})
-                        &mdash; mail will fall back to SMTP.
-                    </div>
-                @else
-                    <div class="alert alert-danger border-0 small py-2 mb-3">
-                        <i class="fa-solid fa-triangle-exclamation me-1"></i>
-                        <strong>No working mail service.</strong>
-                        {{ $mail['gmail_status']['message'] ?? '' }}
-                        MAIL_MAILER is <code>{{ $mail['mailer'] }}</code>, which does not deliver email.
-                    </div>
-                @endif
-
-                <div class="mail-status-row"><span class="label">Mailer</span><span class="value">{{ $mail['mailer'] }}</span></div>
-                @if($mail['mailer'] === 'smtp')
-                    <div class="mail-status-row"><span class="label">SMTP Host</span><span class="value">{{ $mail['host'] ?: 'not set' }}</span></div>
-                    <div class="mail-status-row"><span class="label">Port</span><span class="value">{{ $mail['port'] ?: 'not set' }}</span></div>
-                    <div class="mail-status-row"><span class="label">Encryption</span><span class="value">{{ $mail['encryption'] ?: 'none' }}</span></div>
-                    <div class="mail-status-row"><span class="label">Username</span><span class="value">{{ $mail['username'] ?: 'not set' }}</span></div>
-                    <div class="mail-status-row">
-                        <span class="label">Password</span>
-                        <span class="value">{{ $mail['password_set'] ? 'set' : 'NOT SET' }}</span>
-                    </div>
-                @endif
-                <div class="mail-status-row"><span class="label">From Address</span><span class="value">{{ $mail['from'] ?: 'not set' }}</span></div>
-                <div class="mail-status-row">
-                    <span class="label">Gmail API (OAuth)</span>
-                    @php
-                        $state = $mail['gmail_status']['state'] ?? 'missing';
-                        $stateColour = ['ok' => 'text-success', 'expired' => 'text-danger', 'missing' => 'text-muted'][$state] ?? 'text-warning';
-                        $stateLabel = ['ok' => 'authorised', 'expired' => 'EXPIRED', 'missing' => 'not configured', 'unreachable' => 'unreachable'][$state] ?? 'error';
-                    @endphp
-                    <span class="value {{ $stateColour }}">{{ $stateLabel }}</span>
-                </div>
-                @if(($mail['gmail_status']['state'] ?? '') !== 'ok' && $mail['gmail_api'])
-                    <div class="setting-hint mt-2">
-                        Fix it by running <code>php artisan gmail:authorize</code> on the server, then
-                        <code>php artisan config:clear</code>.
-                    </div>
-                @endif
-            </div>
-
-            <div class="col-12 col-lg-6">
+            <div class="col-12">
                 <div class="border rounded-3 bg-light p-3 h-100 d-flex flex-column">
                     <h6 class="fw-bold text-dark mb-2"><i class="fa-solid fa-paper-plane text-primary me-2"></i> Send a Test Email</h6>
                     <p class="setting-hint mb-3">

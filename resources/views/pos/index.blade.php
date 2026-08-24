@@ -9,7 +9,7 @@
     }
     .sticky-top-filters {
         position: sticky;
-        top: 0;
+        top: var(--topbar-h, 52px);
         z-index: 20;
         background: #f8fafc;
         padding-bottom: 1rem;
@@ -46,14 +46,14 @@
     }
     .sticky-cart-sidebar {
         position: sticky;
-        top: 1rem;
-        max-height: calc(100vh - 2rem);
+        top: calc(var(--topbar-h, 52px) + 1rem);
+        max-height: calc(100vh - var(--topbar-h, 52px) - 2rem);
     }
     .cart-container {
         background: #ffffff;
         border-radius: 1rem;
         box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
-        height: calc(100vh - 2rem);
+        height: calc(100vh - var(--topbar-h, 52px) - 2rem);
         display: flex;
         flex-direction: column;
     }
