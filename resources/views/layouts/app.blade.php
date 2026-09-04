@@ -603,6 +603,87 @@
                 }
             });
         </script>
+
+        @auth
+        {{-- ====================================================
+             SECURITY: Single-window enforcement + tab-close logout
+             ====================================================
+             Rules enforced client-side:
+             1. Only ONE browser window/tab may be active at a time.
+                If a second window opens, it is redirected to /login
+                immediately with a "session_taken" notice.
+             2. Closing the tab/window fires a silent POST beacon to
+                /logout-beacon, invalidating the server session so the
+                next person who opens the browser must log in fresh.
+        --}}
+        <script>
+        (function () {
+            'use strict';
+
+            // Only run when BroadcastChannel is available (all modern browsers)
+            if (typeof BroadcastChannel === 'undefined') return;
+
+            var CHANNEL  = 'capj_pos_session';
+            var TAB_ID   = Math.random().toString(36).slice(2) + Date.now();
+            var navigating = false;
+
+            // ---- Track intentional same-origin navigations ----
+            // so we don't mistake link clicks for a real "close".
+            document.addEventListener('click', function (e) {
+                var a = e.target.closest('a[href]');
+                if (a) {
+                    try {
+                        if (new URL(a.href, location.origin).origin === location.origin) {
+                            navigating = true;
+                        }
+                    } catch (_) {}
+                }
+            }, true);
+
+            document.addEventListener('submit', function () {
+                navigating = true;
+            }, true);
+
+            // ---- BroadcastChannel: one active window only ----
+            var bc = new BroadcastChannel(CHANNEL);
+
+            // Announce this tab to any already-open tabs
+            bc.postMessage({ type: 'NEW_TAB', id: TAB_ID });
+
+            bc.onmessage = function (e) {
+                var msg = e.data;
+
+                // An existing tab saw our announcement → it tells us the session is taken
+                if (msg.type === 'SESSION_ACTIVE' && msg.for === TAB_ID) {
+                    navigating = true;   // suppress beacon — we were never truly "closed"
+                    bc.close();
+                    // Redirect this new tab to login with an explanatory notice
+                    window.location.replace('/login?reason=session_taken');
+                    return;
+                }
+
+                // A new tab just opened — tell it this window owns the session
+                if (msg.type === 'NEW_TAB' && msg.id !== TAB_ID) {
+                    bc.postMessage({ type: 'SESSION_ACTIVE', id: TAB_ID, for: msg.id });
+                }
+            };
+
+            // ---- Tab / window close → silent logout beacon ----
+            window.addEventListener('beforeunload', function () {
+                if (navigating) return;   // just navigating internally — don't log out
+
+                var csrfMeta = document.querySelector('meta[name="csrf-token"]');
+                if (!csrfMeta) return;
+
+                // sendBeacon keeps the request alive even after the page unloads
+                var fd = new FormData();
+                fd.append('_token', csrfMeta.getAttribute('content'));
+                navigator.sendBeacon('/logout-beacon', fd);
+            });
+        })();
+        </script>
+        @endauth
+
         @stack('scripts')
 </body>
 

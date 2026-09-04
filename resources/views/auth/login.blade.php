@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -120,6 +120,16 @@
                 @foreach($errors->all() as $error)
                     <div class="d-flex align-items-center"><i class="fa-solid fa-circle-exclamation me-2"></i> {{ $error }}</div>
                 @endforeach
+            </div>
+        @endif
+
+        @if(request('reason') === 'session_taken')
+            <div class="alert alert-warning small py-2 border-0 mb-4 rounded-3 shadow-sm d-flex align-items-start gap-2">
+                <i class="fa-solid fa-shield-halved mt-1 text-warning"></i>
+                <div>
+                    <strong>Session already active.</strong><br>
+                    This system is already open in another window. Please log in again to continue here, or close this tab and use the original window.
+                </div>
             </div>
         @endif
 
