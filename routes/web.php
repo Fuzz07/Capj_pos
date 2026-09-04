@@ -88,6 +88,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
         Route::post('/settings', [SettingsController::class, 'update'])->name('settings.update');
         Route::post('/settings/test-mail', [SettingsController::class, 'testMail'])->name('settings.test-mail');
+        Route::post('/settings/gcash-qr', [SettingsController::class, 'uploadGcashQr'])->name('settings.gcash-qr');
     });
 
     // Orders

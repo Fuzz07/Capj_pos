@@ -63,6 +63,36 @@ class SettingsController extends Controller
         return redirect()->route('settings.index')->with('success', 'Settings saved successfully.');
     }
 
+    public function uploadGcashQr(Request $request)
+    {
+        $request->validate([
+            'gcash_qr' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048',
+        ], [
+            'gcash_qr.required' => 'Please select an image file.',
+            'gcash_qr.image'    => 'The file must be an image.',
+            'gcash_qr.mimes'    => 'Accepted formats: JPG, PNG, GIF, WebP.',
+            'gcash_qr.max'      => 'Image must be 2 MB or smaller.',
+        ]);
+
+        $file = $request->file('gcash_qr');
+        $destination = public_path('images');
+
+        if (!file_exists($destination)) {
+            mkdir($destination, 0755, true);
+        }
+
+        // Always save as gcash-qr.jpg so all references keep working
+        $file->move($destination, 'gcash-qr.jpg');
+
+        ActivityLog::create([
+            'user_id'     => auth()->id(),
+            'action'      => 'GCASH_QR_UPDATED',
+            'description' => 'Uploaded a new GCash QR code image.',
+        ]);
+
+        return redirect()->route('settings.index')->with('success', 'GCash QR code updated successfully.');
+    }
+
     /**
      * Send a real test email so mail problems can be diagnosed from the browser
      * (useful on shared hosting with no terminal access).

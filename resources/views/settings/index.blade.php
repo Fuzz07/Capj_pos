@@ -153,6 +153,59 @@
                 </div>
             </div>
 
+            {{-- GCash QR Code Upload (separate form — needs multipart) --}}
+            <div class="col-12">
+                <div class="card card-custom p-4">
+                    <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom">
+                        <div class="settings-section-icon" style="background:#0057a3;">
+                            <i class="fa-solid fa-qrcode"></i>
+                        </div>
+                        <div>
+                            <p class="settings-section-title">GCash QR Code Image</p>
+                            <span class="setting-hint">Displayed on the checkout screen when customer pays via GCash.</span>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 align-items-start">
+                        {{-- Current QR preview --}}
+                        <div class="col-12 col-sm-auto text-center">
+                            <p class="small fw-semibold text-secondary mb-2">Current QR Code</p>
+                            <img id="gcashQrPreview"
+                                 src="{{ asset('images/gcash-qr.jpg') }}?v={{ time() }}"
+                                 alt="GCash QR Code"
+                                 class="rounded border shadow-sm"
+                                 style="width:160px; height:160px; object-fit:contain; background:#f8f9fa;"
+                                 onerror="this.src='https://placehold.co/160x160/f8f9fa/94a3b8?text=No+QR+yet'">
+                        </div>
+
+                        {{-- Upload form --}}
+                        <div class="col">
+                            <form action="{{ route('settings.gcash-qr') }}" method="POST" enctype="multipart/form-data" id="gcashQrForm">
+                                @csrf
+                                <label class="form-label small fw-semibold text-secondary">Upload New QR Code</label>
+
+                                <div class="input-group mb-2">
+                                    <input type="file" name="gcash_qr" id="gcashQrInput"
+                                           class="form-control @error('gcash_qr') is-invalid @enderror"
+                                           accept="image/*"
+                                           onchange="previewGcashQr(this)">
+                                    <button type="submit" class="btn btn-primary fw-semibold px-3">
+                                        <i class="fa-solid fa-upload me-1"></i> Upload
+                                    </button>
+                                    @error('gcash_qr')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="setting-hint">
+                                    Accepted: JPG, PNG, WebP &mdash; max 2 MB. The image will replace the current QR code immediately.
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Inventory -->
             <div class="col-12 col-lg-6">
                 <div class="card card-custom p-4 h-100">
@@ -266,3 +319,17 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    function previewGcashQr(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('gcashQrPreview').src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+@endpush
