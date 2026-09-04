@@ -15,6 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'app.admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
+        // Exclude the silent beacon logout from CSRF — it only destroys the caller's own session
+        $middleware->validateCsrfTokens(except: [
+            'logout-beacon',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
