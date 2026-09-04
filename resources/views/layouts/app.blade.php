@@ -604,49 +604,6 @@
             });
         </script>
 
-        @auth
-        {{-- ================================================================
-             SECURITY: Auto-logout when the tab/window is closed.
-             Single-session-per-user enforcement is handled server-side by
-             App\Http\Middleware\SingleSessionMiddleware — no client JS needed
-             for that. This block only handles the tab/window close case.
-        --}}
-        <script>
-        (function () {
-            'use strict';
-
-            var navigating = false;
-
-            // Mark intentional same-origin navigations so beforeunload
-            // does NOT fire the beacon (we're just changing pages, not closing).
-            document.addEventListener('click', function (e) {
-                var a = e.target.closest('a[href]');
-                if (a) {
-                    try {
-                        if (new URL(a.href, location.origin).origin === location.origin) {
-                            navigating = true;
-                        }
-                    } catch (_) {}
-                }
-            }, true);
-            document.addEventListener('submit', function () { navigating = true; }, true);
-
-            // When the tab/window is truly closed, silently invalidate the session
-            // on the server so the next person who opens the browser must log in.
-            window.addEventListener('beforeunload', function () {
-                if (navigating) return;
-
-                var csrfMeta = document.querySelector('meta[name="csrf-token"]');
-                if (!csrfMeta) return;
-
-                var fd = new FormData();
-                fd.append('_token', csrfMeta.getAttribute('content'));
-                navigator.sendBeacon('/logout-beacon', fd);
-            });
-        })();
-        </script>
-        @endauth
-
         @stack('scripts')
 </body>
 

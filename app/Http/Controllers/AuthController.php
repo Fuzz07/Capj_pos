@@ -49,24 +49,11 @@ class AuthController extends Controller
 
             $user = Auth::user();
 
-            // Only enforce single-session if the migration has been run.
+            // Single-session tracking: issue a fresh token for this login session
             if (Schema::hasColumn('users', 'session_token')) {
-                // Check whether an active session already exists for this user.
-                $hasActiveSession = $user->session_token !== null
-                    && DB::table('sessions')
-                        ->where('user_id', $user->id)
-                        ->where('id', '!=', $request->session()->getId())
-                        ->exists();
-
-                if ($hasActiveSession) {
-                    // Window 2: put a wrong token so middleware kicks it out immediately.
-                    $request->session()->put('auth_session_token', 'blocked_' . Str::random(16));
-                } else {
-                    // Window 1 / fresh login: issue a new token.
-                    $token = Str::random(64);
-                    $user->update(['session_token' => $token]);
-                    $request->session()->put('auth_session_token', $token);
-                }
+                $token = Str::random(64);
+                $user->update(['session_token' => $token]);
+                $request->session()->put('auth_session_token', $token);
             }
 
             ActivityLog::create([

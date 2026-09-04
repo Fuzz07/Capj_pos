@@ -39,27 +39,6 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth', 'single.session'])->group(function () {
     Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Silent beacon logout — called by navigator.sendBeacon() on tab close (no redirect needed)
-    Route::post('/logout-beacon', function (\Illuminate\Http\Request $request) {
-        if (auth()->check()) {
-            // Clear the session token so the next login from any device is accepted.
-            if (\Illuminate\Support\Facades\Schema::hasColumn('users', 'session_token')) {
-                auth()->user()->update(['session_token' => null]);
-            }
-
-            \App\Models\ActivityLog::create([
-                'user_id'     => auth()->id(),
-                'action'      => 'USER_LOGOUT',
-                'description' => 'Auto-logout on tab/window close (beacon).',
-            ]);
-        }
-        auth()->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return response()->noContent(); // 204 — sendBeacon ignores the body anyway
-    })->name('logout.beacon');
-
-
     // POS & Ordering
     Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
     Route::post('/pos/order', [PosController::class, 'processOrder'])->name('pos.order');
