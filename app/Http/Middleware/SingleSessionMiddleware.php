@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * SingleSessionMiddleware
@@ -26,9 +27,15 @@ class SingleSessionMiddleware
     public function handle(Request $request, Closure $next): mixed
     {
         if (Auth::check()) {
-            $user              = Auth::user();
-            $sessionToken      = $request->session()->get('auth_session_token');
-            $dbToken           = $user->session_token;
+            // Guard: if the migration hasn't been run yet the column won't exist.
+            // Skip enforcement silently until the column is present.
+            if (!Schema::hasColumn('users', 'session_token')) {
+                return $next($request);
+            }
+
+            $user         = Auth::user();
+            $sessionToken = $request->session()->get('auth_session_token');
+            $dbToken      = $user->session_token;
 
             // If there's no token stored yet (e.g. existing sessions from before
             // this feature was deployed), just write the current DB value so the
@@ -44,8 +51,7 @@ class SingleSessionMiddleware
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
 
-                return redirect()->route('login')
-                    ->with('status', 'You have been logged out because your account was accessed from another device or browser.');
+                return redirect()->route('login');
             }
         }
 
