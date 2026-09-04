@@ -12,7 +12,8 @@
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.78), rgba(20, 10, 10, 0.82)), url("{{ asset('images/login-bg.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
             min-height: 100vh;
             display: flex;
             align-items: center;

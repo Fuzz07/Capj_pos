@@ -1,0 +1,499 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) Antigravity/2.0">
+  <diagram id="page-complete-flowchart" name="Complete End-to-End System Flowchart">
+    <mxGraphModel dx="2728" dy="1455" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="3100" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="lane_client" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#3b82f6;fontStyle=1;fontSize=14;startSize=35;" value="1. User / Client (Web &amp; Mobile)" vertex="1">
+          <mxGeometry height="3000" width="390" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="n_start" parent="lane_client" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#15803d;fontStyle=1;fontSize=11;" value="START&#xa;Open Web Portal / Mobile App" vertex="1">
+          <mxGeometry height="45" width="290" x="50" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dec_has_acct" parent="lane_client" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fef08a;strokeColor=#ca8a04;fontStyle=1;fontSize=11;" value="Has Existing&#xa;Account?" vertex="1">
+          <mxGeometry height="70" width="150" x="120" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="lane_client" source="n_start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_dec_has_acct" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_app" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;fontStyle=1;fontSize=14;startSize=35;" value="2. Website / Mobile App (UI Layer)" vertex="1">
+          <mxGeometry height="3000" width="400" x="450" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_backend" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fffbeb;strokeColor=#d97706;fontStyle=1;fontSize=14;startSize=35;" value="3. Backend API &amp; Security Gateway" vertex="1">
+          <mxGeometry height="3000" width="430" x="870" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_db" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#8b5cf6;fontStyle=1;fontSize=14;startSize=35;" value="4. Database Layer (MySQL Storage)" vertex="1">
+          <mxGeometry height="3000" width="390" x="1320" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_admin" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fdf2f8;strokeColor=#db2777;fontStyle=1;fontSize=14;startSize=35;" value="5. Admin / Staff Management" vertex="1">
+          <mxGeometry height="3000" width="390" x="1730" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="n_input_reg" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#f3e8ff;strokeColor=#7c3aed;fontStyle=1;fontSize=11;" value="INPUT: Registration Details&#xa;(Name, Email, Password, Role)" vertex="1">
+          <mxGeometry height="45" width="290" x="90" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="n_api_reg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="API Request: POST /api/register&#xa;(Payload &amp; CSRF Verification)" vertex="1">
+          <mxGeometry height="45" width="320" x="490" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="n_be_reg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=0;fontSize=11;" value="BACKEND: Validate Input,&#xa;Hash Password &amp; Generate OTP" vertex="1">
+          <mxGeometry height="45" width="350" x="910" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_reg" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: INSERT INTO users &amp; profiles&#xa;(is_active=1, email_verified=0)" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="n_be_otp" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=0;fontSize=11;" value="BACKEND: Dispatch Email OTP&#xa;via SMTP / Mail Gateway" vertex="1">
+          <mxGeometry height="45" width="350" x="910" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="n_input_otp" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#f3e8ff;strokeColor=#7c3aed;fontStyle=1;fontSize=11;" value="INPUT: Enter Verification OTP" vertex="1">
+          <mxGeometry height="45" width="290" x="90" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="n_be_verify" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=0;fontSize=11;" value="BACKEND: Verify OTP &amp;&#xa;Mark email_verified_at = NOW()" vertex="1">
+          <mxGeometry height="45" width="350" x="910" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_verify" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: UPDATE users SET&#xa;email_verified_at = NOW()" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="n_input_login" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#f3e8ff;strokeColor=#7c3aed;fontStyle=1;fontSize=11;" value="INPUT: Username/Email &amp; Password" vertex="1">
+          <mxGeometry height="45" width="290" x="90" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="n_api_login" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="API Request: POST /api/login&#xa;(Credentials &amp; Device Headers)" vertex="1">
+          <mxGeometry height="45" width="320" x="490" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="n_be_auth" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=0;fontSize=11;" value="BACKEND: Sanitize Request,&#xa;Lookup User &amp; Verify Password Hash" vertex="1">
+          <mxGeometry height="45" width="350" x="910" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_user_auth" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: SELECT * FROM users&#xa;WHERE username = ? OR email = ?" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dec_auth_ok" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fef08a;strokeColor=#ca8a04;fontStyle=1;fontSize=11;" value="Credentials&#xa;Valid?" vertex="1">
+          <mxGeometry height="70" width="150" x="1010" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="n_ui_auth_err" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="UI: Display Error Alert&#xa;(Invalid Credentials / Blocked)" vertex="1">
+          <mxGeometry height="45" width="320" x="490" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dec_single_sess" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fef08a;strokeColor=#ca8a04;fontStyle=1;fontSize=11;" value="Active Session&#xa;Exists on Other&#xa;Device/Tab?" vertex="1">
+          <mxGeometry height="75" width="170" x="1000" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="n_be_invalidate" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=0;fontSize=11;" value="BACKEND: Invalidate Obsolete Token&#xa;&amp; Terminate Previous Session" vertex="1">
+          <mxGeometry height="45" width="350" x="910" y="855" as="geometry" />
+        </mxCell>
+        <mxCell id="n_be_issue_token" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=0;fontSize=11;" value="BACKEND: Generate 64-char session_token&#xa;&amp; Issue Authenticated Bearer/Cookie" vertex="1">
+          <mxGeometry height="45" width="350" x="910" y="920" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_save_token" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: UPDATE users SET session_token=?&#xa;INSERT INTO activity_logs (Login)" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="920" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dec_role" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fef08a;strokeColor=#ca8a04;fontStyle=1;fontSize=11;" value="User Role?" vertex="1">
+          <mxGeometry height="70" width="150" x="1010" y="990" as="geometry" />
+        </mxCell>
+        <mxCell id="n_client_dash" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="UI: Store Token in sessionStorage&#xa;&amp; Render Client Dashboard" vertex="1">
+          <mxGeometry height="50" width="320" x="490" y="1080" as="geometry" />
+        </mxCell>
+        <mxCell id="n_client_nav" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontStyle=0;fontSize=11;" value="USER: Access Menu, Catalog,&#xa;Profile &amp; Notifications" vertex="1">
+          <mxGeometry height="50" width="290" x="90" y="1080" as="geometry" />
+        </mxCell>
+        <mxCell id="n_api_catalog" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="API: GET /api/products&#xa;(Fetch Active Menu &amp; Prices)" vertex="1">
+          <mxGeometry height="45" width="320" x="490" y="1160" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_catalog" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: SELECT * FROM inventory&#xa;WHERE is_active = 1" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="1160" as="geometry" />
+        </mxCell>
+        <mxCell id="n_ui_catalog" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="UI: Display Product Grid,&#xa;Stock Badges &amp; Add-to-Cart Buttons" vertex="1">
+          <mxGeometry height="45" width="320" x="490" y="1230" as="geometry" />
+        </mxCell>
+        <mxCell id="n_input_cart" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#f3e8ff;strokeColor=#7c3aed;fontStyle=1;fontSize=11;" value="INPUT: Select Items, Adjust Qty,&#xa;Choose Dine-in / Take-out Option" vertex="1">
+          <mxGeometry height="50" width="290" x="90" y="1300" as="geometry" />
+        </mxCell>
+        <mxCell id="n_ui_calc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="UI: Calculate Real-time Subtotals,&#xa;Takeout Fees &amp; Total Amount" vertex="1">
+          <mxGeometry height="50" width="320" x="490" y="1300" as="geometry" />
+        </mxCell>
+        <mxCell id="n_api_checkout" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="API Request: POST /api/orders/checkout&#xa;(Cart Items, Service Type, Notes)" vertex="1">
+          <mxGeometry height="45" width="320" x="490" y="1380" as="geometry" />
+        </mxCell>
+        <mxCell id="n_be_check_stock" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=0;fontSize=11;" value="BACKEND: Verify Stock Availability&#xa;&amp; Compute Official Order Total" vertex="1">
+          <mxGeometry height="45" width="350" x="910" y="1380" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_stock_check" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: SELECT stock_qty FROM inventory&#xa;WHERE id IN (order_items)" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="1380" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dec_stock_ok" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fef08a;strokeColor=#ca8a04;fontStyle=1;fontSize=11;" value="All Items&#xa;In Stock?" vertex="1">
+          <mxGeometry height="70" width="150" x="1010" y="1450" as="geometry" />
+        </mxCell>
+        <mxCell id="n_ui_stock_err" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="UI: Alert &quot;Item Out of Stock&quot;&#xa;Prompt Cart Adjustment" vertex="1">
+          <mxGeometry height="45" width="320" x="490" y="1460" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_create_order" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: INSERT INTO orders (status=pending)&#xa;INSERT INTO order_items" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="1530" as="geometry" />
+        </mxCell>
+        <mxCell id="n_be_order_resp" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=0;fontSize=11;" value="BACKEND: Return Order ID &amp;&#xa;Payment Instructions Payload" vertex="1">
+          <mxGeometry height="50" width="350" x="910" y="1530" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dec_pay_method" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fef08a;strokeColor=#ca8a04;fontStyle=1;fontSize=11;" value="Select Payment&#xa;Method?" vertex="1">
+          <mxGeometry height="75" width="150" x="160" y="1610" as="geometry" />
+        </mxCell>
+        <mxCell id="n_cash_flow" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontStyle=0;fontSize=11;" value="USER: Select Cash at Counter&#xa;(Prepare Exact Cash Tender)" vertex="1">
+          <mxGeometry height="50" width="170" x="70" y="1710" as="geometry" />
+        </mxCell>
+        <mxCell id="n_api_cash" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="API: POST /api/orders/{id}/pay-cash&#xa;(Set Payment Method = &quot;cash&quot;)" vertex="1">
+          <mxGeometry height="50" width="320" x="490" y="1710" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_cash" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: INSERT INTO payments&#xa;(method=&quot;cash&quot;, status=&quot;pending_cash&quot;)" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="1710" as="geometry" />
+        </mxCell>
+        <mxCell id="n_gcash_flow" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontStyle=0;fontSize=11;" value="USER: Select GCash / E-Wallet&#xa;(View GCash Account &amp; QR Code)" vertex="1">
+          <mxGeometry height="50" width="170" x="250" y="1710" as="geometry" />
+        </mxCell>
+        <mxCell id="n_ui_gcash_details" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="UI: Render GCash QR Code,&#xa;Account Number &amp; Payment Guide" vertex="1">
+          <mxGeometry height="50" width="320" x="490" y="1780" as="geometry" />
+        </mxCell>
+        <mxCell id="n_user_transfer" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontStyle=0;fontSize=11;" value="USER: Send Payment via GCash App&#xa;&amp; Capture Screenshot / Receipt" vertex="1">
+          <mxGeometry height="50" width="290" x="90" y="1850" as="geometry" />
+        </mxCell>
+        <mxCell id="n_input_receipt" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#f3e8ff;strokeColor=#7c3aed;fontStyle=1;fontSize=11;" value="INPUT: Upload Receipt Image/PDF&#xa;&amp; Enter GCash Reference Number" vertex="1">
+          <mxGeometry height="50" width="290" x="90" y="1920" as="geometry" />
+        </mxCell>
+        <mxCell id="n_api_receipt" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="API: POST /api/payments/submit-receipt&#xa;(Multipart Form: file + ref_no)" vertex="1">
+          <mxGeometry height="50" width="320" x="490" y="1920" as="geometry" />
+        </mxCell>
+        <mxCell id="n_be_store_receipt" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=0;fontSize=11;" value="BACKEND: Validate File Extension,&#xa;Save File to Storage &amp; Hash Ref" vertex="1">
+          <mxGeometry height="50" width="350" x="910" y="1920" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_save_payment" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: INSERT INTO payments (status=pending,&#xa;receipt_path, ref_no, amount)" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="1920" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_notif_admin" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: INSERT INTO notifications&#xa;(type=new_payment_for_verification)" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="1990" as="geometry" />
+        </mxCell>
+        <mxCell id="n_ui_pending_status" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="UI: Update Order Status -&gt; &quot;Pending Verification&quot;&#xa;Display Live Status Tracker to Client" vertex="1">
+          <mxGeometry height="50" width="320" x="490" y="1990" as="geometry" />
+        </mxCell>
+        <mxCell id="n_admin_login_entry" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#db2777;fontStyle=0;fontSize=11;" value="ADMIN / STAFF: Access Portal Dashboard&#xa;View Orders, Reports &amp; Settings" vertex="1">
+          <mxGeometry height="50" width="310" x="1770" y="1080" as="geometry" />
+        </mxCell>
+        <mxCell id="n_admin_alert" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#db2777;fontStyle=0;fontSize=11;" value="ADMIN: Receive Real-time Alert&#xa;&amp; Open Order Review Drawer" vertex="1">
+          <mxGeometry height="50" width="310" x="1770" y="2070" as="geometry" />
+        </mxCell>
+        <mxCell id="n_admin_inspect" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#db2777;fontStyle=0;fontSize=11;" value="ADMIN: Inspect Uploaded Receipt Image&#xa;&amp; Verify GCash Ref No. vs Account" vertex="1">
+          <mxGeometry height="50" width="310" x="1770" y="2140" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dec_verify_pay" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fef08a;strokeColor=#ca8a04;fontStyle=1;fontSize=11;" value="Payment Proof&#xa;Valid &amp; Confirmed?" vertex="1">
+          <mxGeometry height="75" width="150" x="1850" y="2210" as="geometry" />
+        </mxCell>
+        <mxCell id="n_input_reject_note" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#f3e8ff;strokeColor=#7c3aed;fontStyle=1;fontSize=11;" value="INPUT: Enter Rejection Reason&#xa;(e.g., Unreadable Image / Invalid Ref)" vertex="1">
+          <mxGeometry height="50" width="310" x="1770" y="2300" as="geometry" />
+        </mxCell>
+        <mxCell id="n_api_reject" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="API: POST /api/payments/{id}/reject" vertex="1">
+          <mxGeometry height="45" width="320" x="490" y="2300" as="geometry" />
+        </mxCell>
+        <mxCell id="n_be_reject" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=0;fontSize=11;" value="BACKEND: Mark Payment Rejected&#xa;&amp; Set Order Status = payment_failed" vertex="1">
+          <mxGeometry height="45" width="350" x="910" y="2300" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_reject" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: UPDATE payments SET status=rejected&#xa;DB: UPDATE orders SET status=failed" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="2300" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_reject_notif" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: INSERT INTO notifications&#xa;(user_id=?, &quot;Payment Rejected - Resubmit&quot;)" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="2365" as="geometry" />
+        </mxCell>
+        <mxCell id="n_ui_reject_alert" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="UI: Push Notification &amp; Error Modal&#xa;Prompt Client to Re-upload or Pay Cash" vertex="1">
+          <mxGeometry height="50" width="320" x="490" y="2365" as="geometry" />
+        </mxCell>
+        <mxCell id="n_admin_approve" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#db2777;fontStyle=0;fontSize=11;" value="ADMIN: Click &quot;Approve Payment&quot;&#xa;&amp; Confirm Order Acceptance" vertex="1">
+          <mxGeometry height="50" width="310" x="1770" y="2440" as="geometry" />
+        </mxCell>
+        <mxCell id="n_api_approve" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="API: POST /api/payments/{id}/approve" vertex="1">
+          <mxGeometry height="45" width="320" x="490" y="2440" as="geometry" />
+        </mxCell>
+        <mxCell id="n_be_approve" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=0;fontSize=11;" value="BACKEND: Set Payment = completed,&#xa;Order = processing &amp; Deduct Stocks" vertex="1">
+          <mxGeometry height="50" width="350" x="910" y="2440" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_approve" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: UPDATE payments SET status=completed&#xa;DB: UPDATE orders SET status=processing" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="2440" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_deduct_stock" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: UPDATE inventory SET&#xa;stock_qty = stock_qty - order_qty" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="2510" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dec_low_stock" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fef08a;strokeColor=#ca8a04;fontStyle=1;fontSize=11;" value="stock_qty &lt;=&#xa;Low Threshold?" vertex="1">
+          <mxGeometry height="70" width="150" x="1010" y="2510" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_low_notif" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: INSERT INTO notifications&#xa;(type=low_stock_warning, role=admin)" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="2580" as="geometry" />
+        </mxCell>
+        <mxCell id="n_staff_fulfill" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#db2777;fontStyle=0;fontSize=11;" value="STAFF: Prepare Items / Cook Order&#xa;&amp; Click &quot;Mark as Ready / Completed&quot;" vertex="1">
+          <mxGeometry height="50" width="310" x="1770" y="2650" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_order_done" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: UPDATE orders SET status=completed&#xa;INSERT INTO activity_logs (Order Done)" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="2650" as="geometry" />
+        </mxCell>
+        <mxCell id="n_be_done_notif" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=0;fontSize=11;" value="BACKEND: Dispatch Real-time Notification&#xa;(In-App Alert &amp; Email Confirmation)" vertex="1">
+          <mxGeometry height="50" width="350" x="910" y="2650" as="geometry" />
+        </mxCell>
+        <mxCell id="n_ui_order_done" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="UI: Status Changed -&gt; &quot;Order Completed&quot;&#xa;Display Official Receipt &amp; Pickup Code" vertex="1">
+          <mxGeometry height="50" width="320" x="490" y="2730" as="geometry" />
+        </mxCell>
+        <mxCell id="n_doc_receipt" parent="1" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#f1f5f9;strokeColor=#475569;fontStyle=1;fontSize=11;" value="DOCUMENT: Official Printable Receipt&#xa;(Itemized Summary, Tax, Ref No)" vertex="1">
+          <mxGeometry height="55" width="290" x="90" y="2730" as="geometry" />
+        </mxCell>
+        <mxCell id="n_admin_reports" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#db2777;fontStyle=0;fontSize=11;" value="ADMIN: Query Daily/Monthly Sales,&#xa;Audit Logs, Inventory &amp; User Roles" vertex="1">
+          <mxGeometry height="50" width="310" x="1770" y="2810" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_reports" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: SELECT aggregates FROM orders,&#xa;activity_logs, settings &amp; users" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="2810" as="geometry" />
+        </mxCell>
+        <mxCell id="n_user_logout" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontStyle=0;fontSize=11;" value="USER / ADMIN: Click &quot;Logout&quot;&#xa;(End Active Work Session)" vertex="1">
+          <mxGeometry height="45" width="290" x="90" y="2850" as="geometry" />
+        </mxCell>
+        <mxCell id="n_api_logout" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=0;fontSize=11;" value="API: POST /api/logout&#xa;(Bearer Token / Session Cookie)" vertex="1">
+          <mxGeometry height="45" width="320" x="490" y="2850" as="geometry" />
+        </mxCell>
+        <mxCell id="n_be_logout" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=0;fontSize=11;" value="BACKEND: Revoke Sanctum Token&#xa;&amp; Invalidate Session ID in Cache/DB" vertex="1">
+          <mxGeometry height="45" width="350" x="910" y="2850" as="geometry" />
+        </mxCell>
+        <mxCell id="n_db_logout" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e9d5ff;strokeColor=#7c3aed;fontStyle=1;fontSize=10;" value="DB: UPDATE users SET session_token=NULL&#xa;INSERT INTO activity_logs (Logout)" vertex="1">
+          <mxGeometry height="50" width="310" x="1360" y="2880" as="geometry" />
+        </mxCell>
+        <mxCell id="n_end" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#dc2626;fontStyle=1;fontSize=11;" value="END&#xa;Session Terminated &amp; User Redirected to Login" vertex="1">
+          <mxGeometry height="45" width="290" x="90" y="2940" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="n_dec_has_acct" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_input_reg" value="No (New User)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="n_input_reg" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_api_reg" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="n_api_reg" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_be_reg" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="n_be_reg" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_db_reg" value="Insert User">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="n_be_reg" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_be_otp" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="n_be_otp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_input_otp" value="Send OTP Email">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="n_input_otp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=1;entryX=0;entryY=0.5" target="n_be_verify" value="Submit OTP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="n_be_verify" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_db_verify" value="Update Verified">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="n_be_verify" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=1;entryX=1;entryY=0" target="n_input_login" value="Verified -&gt; Go to Login">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="n_dec_has_acct" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=0;entryY=0.5" target="n_input_login" value="Yes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="n_input_login" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_api_login" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="n_api_login" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_be_auth" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="n_be_auth" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_db_user_auth" value="Query User">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="n_be_auth" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_dec_auth_ok" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="n_dec_auth_ok" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_ui_auth_err" value="No (Invalid)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="n_ui_auth_err" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=1" target="n_input_login" value="Retry">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" source="n_dec_auth_ok" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_dec_single_sess" value="Yes (Valid)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="n_dec_single_sess" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_be_invalidate" value="Yes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" edge="1" parent="1" source="n_dec_single_sess" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=1;entryY=0.5" target="n_be_issue_token" value="No / Continued">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e21" edge="1" parent="1" source="n_be_invalidate" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_be_issue_token" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e22" edge="1" parent="1" source="n_be_issue_token" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_db_save_token" value="Save Token">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e23" edge="1" parent="1" source="n_be_issue_token" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_dec_role" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e24" edge="1" parent="1" source="n_dec_role" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_client_dash" value="Client / User">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e25" edge="1" parent="1" source="n_dec_role" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_admin_login_entry" value="Admin / Staff">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e26" edge="1" parent="1" source="n_client_dash" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_client_nav" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e27" edge="1" parent="1" source="n_client_nav" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0;entryY=0.5" target="n_api_catalog" value="Browse Catalog">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e28" edge="1" parent="1" source="n_api_catalog" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_db_catalog" value="Query Products">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e29" edge="1" parent="1" source="n_api_catalog" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_ui_catalog" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e30" edge="1" parent="1" source="n_ui_catalog" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_input_cart" value="Add Items">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e31" edge="1" parent="1" source="n_input_cart" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_ui_calc" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e32" edge="1" parent="1" source="n_ui_calc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_api_checkout" value="Submit Order">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e33" edge="1" parent="1" source="n_api_checkout" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_be_check_stock" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e34" edge="1" parent="1" source="n_be_check_stock" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_db_stock_check" value="Check Inventory">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e35" edge="1" parent="1" source="n_be_check_stock" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_dec_stock_ok" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e36" edge="1" parent="1" source="n_dec_stock_ok" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_ui_stock_err" value="No (Stock Error)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e37" edge="1" parent="1" source="n_ui_stock_err" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=1" target="n_input_cart" value="Adjust Cart">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e38" edge="1" parent="1" source="n_dec_stock_ok" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_db_create_order" value="Yes (Available)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e39" edge="1" parent="1" source="n_db_create_order" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_be_order_resp" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e40" edge="1" parent="1" source="n_be_order_resp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_dec_pay_method" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e41" edge="1" parent="1" source="n_dec_pay_method" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=0.5;entryY=0" target="n_cash_flow" value="Cash at Store">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e42" edge="1" parent="1" source="n_dec_pay_method" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0.5;entryY=0" target="n_gcash_flow" value="GCash / E-Wallet">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e43" edge="1" parent="1" source="n_cash_flow" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_api_cash" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e44" edge="1" parent="1" source="n_api_cash" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_db_cash" value="Record Cash Intent">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e45" edge="1" parent="1" source="n_gcash_flow" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_ui_gcash_details" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e46" edge="1" parent="1" source="n_ui_gcash_details" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=1;entryX=1;entryY=0" target="n_user_transfer" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e47" edge="1" parent="1" source="n_user_transfer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_input_receipt" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e48" edge="1" parent="1" source="n_input_receipt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_api_receipt" value="Upload Proof">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e49" edge="1" parent="1" source="n_api_receipt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_be_store_receipt" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e50" edge="1" parent="1" source="n_be_store_receipt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_db_save_payment" value="Insert Payment">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e51" edge="1" parent="1" source="n_db_save_payment" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_db_notif_admin" value="Alert Admin">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e52" edge="1" parent="1" source="n_be_store_receipt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=1;entryX=1;entryY=0.5" target="n_ui_pending_status" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e53" edge="1" parent="1" source="n_db_notif_admin" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_admin_alert" value="New Payment Notification">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e54" edge="1" parent="1" source="n_admin_alert" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_admin_inspect" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e55" edge="1" parent="1" source="n_admin_inspect" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_dec_verify_pay" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e56" edge="1" parent="1" source="n_dec_verify_pay" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_input_reject_note" value="Rejected (Invalid)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e57" edge="1" parent="1" source="n_input_reject_note" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_api_reject" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e58" edge="1" parent="1" source="n_api_reject" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_be_reject" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e59" edge="1" parent="1" source="n_be_reject" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_db_reject" value="Update Failed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e60" edge="1" parent="1" source="n_db_reject" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_db_reject_notif" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e61" edge="1" parent="1" source="n_db_reject_notif" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_ui_reject_alert" value="Notify Client">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e62" edge="1" parent="1" source="n_ui_reject_alert" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=0;entryY=1" target="n_input_receipt" value="Re-upload Receipt">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e63" edge="1" parent="1" source="n_dec_verify_pay" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=1;entryY=0.5" target="n_admin_approve" value="Approved (Valid)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e64" edge="1" parent="1" source="n_admin_approve" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_api_approve" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e65" edge="1" parent="1" source="n_api_approve" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_be_approve" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e66" edge="1" parent="1" source="n_be_approve" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_db_approve" value="Update Completed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e67" edge="1" parent="1" source="n_db_approve" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_db_deduct_stock" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e68" edge="1" parent="1" source="n_db_deduct_stock" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_dec_low_stock" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e69" edge="1" parent="1" source="n_dec_low_stock" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_db_low_notif" value="Yes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e70" edge="1" parent="1" source="n_admin_approve" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_staff_fulfill" value="Order Ready">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e71" edge="1" parent="1" source="n_staff_fulfill" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_db_order_done" value="Mark Completed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e72" edge="1" parent="1" source="n_db_order_done" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_be_done_notif" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e73" edge="1" parent="1" source="n_be_done_notif" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_ui_order_done" value="Push Real-time Status">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e74" edge="1" parent="1" source="n_ui_order_done" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_doc_receipt" value="Print Receipt">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e75" edge="1" parent="1" source="n_staff_fulfill" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_admin_reports" value="Audit &amp; Reports">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e76" edge="1" parent="1" source="n_admin_reports" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0;exitY=0.5;entryX=1;entryY=0.5" target="n_db_reports" value="Query Aggregates">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e77" edge="1" parent="1" source="n_doc_receipt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_user_logout" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e78" edge="1" parent="1" source="n_user_logout" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_api_logout" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e79" edge="1" parent="1" source="n_api_logout" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_be_logout" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e80" edge="1" parent="1" source="n_be_logout" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="n_db_logout" value="Invalidate Session">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e81" edge="1" parent="1" source="n_user_logout" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;fontSize=10;fontStyle=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="n_end" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

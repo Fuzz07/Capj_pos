@@ -1,0 +1,160 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) Antigravity/2.0">
+  <diagram id="page-main" name="System Architecture">
+    <mxGraphModel dx="1423" dy="759" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="950" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="sw_client" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#cbd5e1;fontStyle=1;fontSize=14;startSize=30;" value="Client Layer (Browser &amp; Session Isolation)" vertex="1">
+          <mxGeometry height="220" width="320" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="client_browser" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e2e8f0;strokeColor=#64748b;fontStyle=1;fontSize=11;" value="Cashier / Admin Web Browser" vertex="1">
+          <mxGeometry height="35" width="280" x="60" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="tab_primary" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=1;fontSize=11;" value="Primary Active Tab&#xa;(Authenticated session_token)" vertex="1">
+          <mxGeometry height="40" width="280" x="60" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="tab_guard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#dc2626;fontStyle=1;fontSize=11;" value="Secondary Tab Guard&#xa;(sessionStorage Client Verification)" vertex="1">
+          <mxGeometry height="40" width="280" x="60" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="sw_security" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#94a3b8;fontStyle=1;fontSize=14;startSize=30;" value="Security &amp; Middleware Layer" vertex="1">
+          <mxGeometry height="220" width="340" x="400" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="csrf_mw" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0e7ff;strokeColor=#4338ca;fontStyle=1;fontSize=11;" value="CSRF Token Validation&#xa;(VerifyCsrfToken Middleware)" vertex="1">
+          <mxGeometry height="40" width="300" x="420" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="session_mw" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0e7ff;strokeColor=#4338ca;fontStyle=1;fontSize=11;" value="SingleSessionMiddleware&#xa;(Compares users.session_token)" vertex="1">
+          <mxGeometry height="40" width="300" x="420" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="admin_mw" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0e7ff;strokeColor=#4338ca;fontStyle=1;fontSize=11;" value="AdminMiddleware&#xa;(Role Authorization: admin vs staff)" vertex="1">
+          <mxGeometry height="40" width="300" x="420" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="sw_controllers" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#93c5fd;fontStyle=1;fontSize=14;startSize=30;" value="Application Controllers Layer (Laravel 11 MVC)" vertex="1">
+          <mxGeometry height="250" width="700" x="40" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_auth" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2563eb;fontStyle=0;fontSize=11;align=left;spacingLeft=10;" value="AuthController&#xa;• Login &amp; Logout&#xa;• OTP Email Verify&#xa;• Session Management" vertex="1">
+          <mxGeometry height="75" width="200" x="60" y="345" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_pos" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2563eb;fontStyle=0;fontSize=11;align=left;spacingLeft=10;" value="PosController&#xa;• POS Cart &amp; Checkout&#xa;• Cash / GCash Payment&#xa;• Receipt Generator" vertex="1">
+          <mxGeometry height="75" width="200" x="290" y="345" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_inv" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2563eb;fontStyle=0;fontSize=11;align=left;spacingLeft=10;" value="InventoryController&#xa;• Menu Product CRUD&#xa;• Stock Deduction&#xa;• Threshold Alerts" vertex="1">
+          <mxGeometry height="75" width="200" x="520" y="345" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_rpt" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2563eb;fontStyle=0;fontSize=11;align=left;spacingLeft=10;" value="ReportController&#xa;• Sales Analytics&#xa;• Daily/Monthly Summaries&#xa;• Audit History Logs" vertex="1">
+          <mxGeometry height="75" width="310" x="60" y="445" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_sett" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2563eb;fontStyle=0;fontSize=11;align=left;spacingLeft=10;" value="SettingsController&#xa;• Store Settings&#xa;• Staff User Management&#xa;• Low Stock Thresholds" vertex="1">
+          <mxGeometry height="75" width="310" x="410" y="445" as="geometry" />
+        </mxCell>
+        <mxCell id="sw_services" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#d8b4fe;fontStyle=1;fontSize=14;startSize=30;" value="Services &amp; Email Notification Layer" vertex="1">
+          <mxGeometry height="220" width="460" x="780" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="notif_svc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;fontStyle=1;fontSize=11;" value="NotificationService&#xa;(Low-Stock Alerts &amp; Notification Handler)" vertex="1">
+          <mxGeometry height="45" width="400" x="810" y="95" as="geometry" />
+        </mxCell>
+        <mxCell id="smtp_svc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;fontStyle=1;fontSize=11;" value="Gmail OAuth2 / SMTP Service&#xa;(OTP Code Delivery to Staff/Admin Email)" vertex="1">
+          <mxGeometry height="45" width="400" x="810" y="155" as="geometry" />
+        </mxCell>
+        <mxCell id="sw_db" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fefce8;strokeColor=#fde047;fontStyle=1;fontSize=14;startSize=30;" value="Storage Layer (MySQL Database: tea_shop)" vertex="1">
+          <mxGeometry height="250" width="460" x="780" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="db_users" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#ffffff;strokeColor=#ca8a04;fontStyle=1;fontSize=10;" value="users&#xa;(Auth, Roles, session_token)" vertex="1">
+          <mxGeometry height="75" width="125" x="800" y="345" as="geometry" />
+        </mxCell>
+        <mxCell id="db_orders" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#ffffff;strokeColor=#ca8a04;fontStyle=1;fontSize=10;" value="orders &amp; order_items&#xa;(Transactions &amp; Line Items)" vertex="1">
+          <mxGeometry height="75" width="135" x="945" y="345" as="geometry" />
+        </mxCell>
+        <mxCell id="db_inventory" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#ffffff;strokeColor=#ca8a04;fontStyle=1;fontSize=10;" value="inventory&#xa;(Products &amp; Stocks)" vertex="1">
+          <mxGeometry height="75" width="125" x="1095" y="345" as="geometry" />
+        </mxCell>
+        <mxCell id="db_logs" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#ffffff;strokeColor=#ca8a04;fontStyle=1;fontSize=10;" value="activity_logs &amp; notifications&#xa;(Audit Trail &amp; Stock Alerts)" vertex="1">
+          <mxGeometry height="75" width="190" x="800" y="445" as="geometry" />
+        </mxCell>
+        <mxCell id="db_settings" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#ffffff;strokeColor=#ca8a04;fontStyle=1;fontSize=10;" value="settings &amp; sessions&#xa;(Store Configs &amp; Session Store)" vertex="1">
+          <mxGeometry height="75" width="210" x="1010" y="445" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="tab_primary" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="csrf_mw" value="HTTPS Requests">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="tab_guard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;;exitX=0.5;exitY=1;entryX=0.2;entryY=0" target="ctrl_auth" value="Redirect If Invalid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="csrf_mw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="session_mw" value="Validated CSRF">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="session_mw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="admin_mw" value="Authorize Admin">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="session_mw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;;exitX=0;exitY=0.5;entryX=0.5;entryY=0" target="ctrl_auth" value="Auth Routes">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="400.04" y="150.04" />
+              <mxPoint x="400.04" y="250.04" />
+              <mxPoint x="30.04" y="250.04" />
+              <mxPoint x="30.04" y="280.04" />
+              <mxPoint x="160.04" y="280.04" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="session_mw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;;exitX=0.5;exitY=1;entryX=0.5;entryY=0" target="ctrl_pos" value="POS Orders">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="session_mw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;;exitX=1;exitY=0.5;entryX=0.5;entryY=0" target="ctrl_inv" value="Stock Mgt">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="ctrl_auth" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;;exitX=0.5;exitY=0;entryX=0;entryY=0.5" target="smtp_svc" value="Dispatch OTP Email">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="160" y="240" />
+              <mxPoint x="810" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="ctrl_inv" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;;exitX=0.5;exitY=0;entryX=0;entryY=0.5" target="notif_svc" value="Low Stock Alert">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="620.04" y="290.04" />
+              <mxPoint x="750.04" y="290.04" />
+              <mxPoint x="750.04" y="117.52" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="ctrl_auth" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;;exitX=0.5;exitY=1;entryX=0;entryY=0.5" target="db_users" value="Auth Query">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="160.02" y="440" />
+              <mxPoint x="510.02" y="440" />
+              <mxPoint x="510.02" y="340" />
+              <mxPoint x="800.02" y="340" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="ctrl_pos" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;;exitX=0.5;exitY=1;entryX=0;entryY=0.5" target="db_orders" value="Write Transaction">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="390.02" y="440" />
+              <mxPoint x="750.02" y="440" />
+              <mxPoint x="750.02" y="382.49" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="ctrl_inv" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;;exitX=0.5;exitY=1;entryX=0;entryY=0.5" target="db_inventory" value="Stock Updates">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="ctrl_rpt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="db_logs" value="Audit History">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="400.04" y="482.48" />
+              <mxPoint x="400.04" y="560.04" />
+              <mxPoint x="780.04" y="560.04" />
+              <mxPoint x="780.04" y="482.48" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="ctrl_sett" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;;exitX=1;exitY=0.5;entryX=0;entryY=0.5" target="db_settings" value="Store Settings">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
