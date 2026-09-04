@@ -123,20 +123,6 @@
             </div>
         @endif
 
-        @if(request('reason') === 'session_taken' || request('reason') === 'session_conflict')
-            <div class="alert alert-warning small py-2 border-0 mb-4 rounded-3 shadow-sm d-flex align-items-start gap-2">
-                <i class="fa-solid fa-shield-halved mt-1 text-warning"></i>
-                <div>
-                    <strong>Security: Session conflict detected.</strong><br>
-                    @if(request('reason') === 'session_conflict')
-                        A second browser window or tab attempted to open this system. For security, <strong>all sessions have been logged out</strong>. Please log in to continue.
-                    @else
-                        This system is already open in another window. Please log in here to continue, or close this tab and return to the original window.
-                    @endif
-                </div>
-            </div>
-        @endif
-
         <form action="{{ route('login') }}" method="POST">
             @csrf
             <div class="mb-3">

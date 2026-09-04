@@ -13,7 +13,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'app.admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'app.admin'     => \App\Http\Middleware\AdminMiddleware::class,
+            'single.session' => \App\Http\Middleware\SingleSessionMiddleware::class,
         ]);
         // Exclude the silent beacon logout from CSRF — it only destroys the caller's own session
         $middleware->validateCsrfTokens(except: [

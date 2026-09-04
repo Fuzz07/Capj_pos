@@ -19,6 +19,7 @@ class User extends Authenticatable
         'email_verification_expires_at',
         'password',
         'role',
+        'session_token',
     ];
 
     protected $hidden = [

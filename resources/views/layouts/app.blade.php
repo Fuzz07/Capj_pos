@@ -605,29 +605,20 @@
         </script>
 
         @auth
-        {{-- ====================================================
-             SECURITY: Single-window enforcement + tab-close logout
-             ====================================================
-             Rules enforced client-side:
-             1. Only ONE authenticated session may be open at a time.
-                When a second tab/window opens the app, the ORIGINAL
-                tab fires a silent server-side logout beacon, then
-                BOTH tabs are redirected to /login.
-             2. Closing the tab/window fires a silent POST beacon to
-                /logout-beacon, invalidating the server session so the
-                next person who opens the browser must log in fresh.
+        {{-- ================================================================
+             SECURITY: Auto-logout when the tab/window is closed.
+             Single-session-per-user enforcement is handled server-side by
+             App\Http\Middleware\SingleSessionMiddleware — no client JS needed
+             for that. This block only handles the tab/window close case.
         --}}
         <script>
         (function () {
             'use strict';
 
-            if (typeof BroadcastChannel === 'undefined') return;
+            var navigating = false;
 
-            var CHANNEL    = 'capj_pos_session';
-            var TAB_ID     = Math.random().toString(36).slice(2) + Date.now();
-            var navigating = false; // true when doing an intentional same-origin nav
-
-            // ── Track intentional navigations so beforeunload won't fire the beacon ──
+            // Mark intentional same-origin navigations so beforeunload
+            // does NOT fire the beacon (we're just changing pages, not closing).
             document.addEventListener('click', function (e) {
                 var a = e.target.closest('a[href]');
                 if (a) {
@@ -640,54 +631,17 @@
             }, true);
             document.addEventListener('submit', function () { navigating = true; }, true);
 
-            // ── Helper: fire the silent server-side logout beacon ──
-            function fireBeacon() {
+            // When the tab/window is truly closed, silently invalidate the session
+            // on the server so the next person who opens the browser must log in.
+            window.addEventListener('beforeunload', function () {
+                if (navigating) return;
+
                 var csrfMeta = document.querySelector('meta[name="csrf-token"]');
                 if (!csrfMeta) return;
+
                 var fd = new FormData();
                 fd.append('_token', csrfMeta.getAttribute('content'));
                 navigator.sendBeacon('/logout-beacon', fd);
-            }
-
-            // ── BroadcastChannel setup ──
-            var bc = new BroadcastChannel(CHANNEL);
-
-            // Announce this tab to any already-open tabs
-            bc.postMessage({ type: 'NEW_TAB', id: TAB_ID });
-
-            bc.onmessage = function (e) {
-                var msg = e.data;
-
-                // ── ORIGINAL tab received a NEW_TAB broadcast ──
-                // Another tab/window just opened the app.
-                // We own the session → log out on the server, then redirect
-                // ourselves to login and tell the new tab to do the same.
-                if (msg.type === 'NEW_TAB' && msg.id !== TAB_ID) {
-                    navigating = true;                         // don't double-fire via beforeunload
-                    bc.postMessage({ type: 'SESSION_CONFLICT', for: msg.id }); // tell the new tab
-                    bc.close();
-                    fireBeacon();                              // server-side logout
-                    window.location.replace('/login?reason=session_conflict');
-                    return;
-                }
-
-                // ── NEW tab received SESSION_CONFLICT directed at it ──
-                // The original tab just logged out; now redirect this tab too.
-                if (msg.type === 'SESSION_CONFLICT' && msg.for === TAB_ID) {
-                    navigating = true;
-                    bc.close();
-                    // Small delay so the original tab's beacon finishes first
-                    setTimeout(function () {
-                        window.location.replace('/login?reason=session_conflict');
-                    }, 300);
-                    return;
-                }
-            };
-
-            // ── Tab / window close → silent logout beacon ──
-            window.addEventListener('beforeunload', function () {
-                if (navigating) return; // intentional navigation — skip
-                fireBeacon();
             });
         })();
         </script>

@@ -36,12 +36,15 @@ Route::middleware('guest')->group(function () {
 });
 
 // Authenticated Routes
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'single.session'])->group(function () {
     Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Silent beacon logout — called by navigator.sendBeacon() on tab close (no redirect needed)
     Route::post('/logout-beacon', function (\Illuminate\Http\Request $request) {
         if (auth()->check()) {
+            // Clear the session token so the next login from any device is accepted.
+            auth()->user()->update(['session_token' => null]);
+
             \App\Models\ActivityLog::create([
                 'user_id'     => auth()->id(),
                 'action'      => 'USER_LOGOUT',

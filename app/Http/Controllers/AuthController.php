@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
@@ -45,13 +46,38 @@ class AuthController extends Controller
             RateLimiter::clear($throttleKey);
             $request->session()->regenerate();
 
-            ActivityLog::create([
-                'user_id' => Auth::id(),
-                'action' => 'USER_LOGIN',
-                'description' => "User logged in: " . (Auth::user()->username)
-            ]);
+            $user = Auth::user();
 
-            $targetRoute = Auth::user()->isAdmin() ? 'dashboard' : 'pos.index';
+            // Check whether an active session already exists for this user.
+            // We verify against the database sessions table so stale/expired
+            // sessions (closed tabs that never sent a beacon) are ignored.
+            $hasActiveSession = $user->session_token !== null
+                && \Illuminate\Support\Facades\DB::table('sessions')
+                    ->where('user_id', $user->id)
+                    ->where('id', '!=', $request->session()->getId())
+                    ->exists();
+
+            if ($hasActiveSession) {
+                // ── Window 2: another session is already active ──
+                // Store a deliberately mismatched token so SingleSessionMiddleware
+                // kicks this session out on the very first authenticated request.
+                // Window 1 (the original) is completely unaffected.
+                $request->session()->put('auth_session_token', 'blocked_' . Str::random(16));
+            } else {
+                // ── Window 1 / fresh login ──
+                // Issue a new token and record it.
+                $token = Str::random(64);
+                $user->update(['session_token' => $token]);
+                $request->session()->put('auth_session_token', $token);
+
+                ActivityLog::create([
+                    'user_id' => $user->id,
+                    'action' => 'USER_LOGIN',
+                    'description' => "User logged in: " . $user->username,
+                ]);
+            }
+
+            $targetRoute = $user->isAdmin() ? 'dashboard' : 'pos.index';
             return redirect()->route($targetRoute);
         }
 
@@ -69,6 +95,9 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         if (Auth::check()) {
+            // Clear the session token so the next login can proceed normally.
+            Auth::user()->update(['session_token' => null]);
+
             ActivityLog::create([
                 'user_id' => Auth::id(),
                 'action' => 'USER_LOGOUT',
