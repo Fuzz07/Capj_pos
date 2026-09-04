@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,9 +15,10 @@
     <!-- Google Fonts & FontAwesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -287,10 +289,11 @@
         .hamburger {
             display: none;
         }
+
         .sidebar-overlay {
             display: none;
         }
-        
+
         /* Mobile & portrait tablets: off-canvas sidebar with hamburger */
         @media (max-width: 991.98px) {
             body {
@@ -298,24 +301,29 @@
                 height: auto;
                 min-height: 100vh;
             }
+
             .sidebar {
                 left: -250px;
                 width: 240px;
                 transition: left 0.3s;
             }
+
             .sidebar.show {
                 left: 0;
                 box-shadow: 4px 0 25px rgba(0, 0, 0, 0.35);
             }
+
             .main-content {
                 margin-left: 0;
                 width: 100%;
                 padding: 4rem 1rem 1.5rem 1rem;
             }
+
             .topbar {
                 margin: -4rem -1rem 1rem -1rem;
                 padding-left: 62px;
             }
+
             .hamburger {
                 display: flex;
                 align-items: center;
@@ -333,6 +341,7 @@
                 border-radius: 8px;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
             }
+
             .sidebar-overlay.show {
                 display: block;
                 position: fixed;
@@ -340,7 +349,7 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: rgba(0,0,0,0.5);
+                background: rgba(0, 0, 0, 0.5);
                 z-index: 999;
             }
         }
@@ -350,18 +359,22 @@
             .main-content {
                 padding: 3.75rem 0.6rem 1.25rem 0.6rem;
             }
+
             .topbar {
                 margin: -3.75rem -0.6rem 1rem -0.6rem;
                 padding-left: 60px;
                 padding-right: 0.7rem;
             }
+
             .topbar-user {
                 display: none;
             }
+
             .main-content .container-fluid.px-4 {
                 padding-left: 0.35rem !important;
                 padding-right: 0.35rem !important;
             }
+
             .main-content h3 {
                 font-size: 1.25rem;
             }
@@ -434,94 +447,95 @@
 
     @stack('styles')
 </head>
+
 <body>
 
     @auth
-    <button class="hamburger" id="hamburgerBtn">&#9776;</button>
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-    
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <div>
-            <div class="sidebar-brand">
-                <img src="{{ asset('images/capj.jpg') }}" alt="CAPTAiN J" onerror="this.src='https://ui-avatars.com/api/?name=CAPTAiN+J&background=random';">
-                <h6>CAPTAiN J {{ ucfirst(auth()->user()->role) }}</h6>
+        <button class="hamburger" id="hamburgerBtn">&#9776;</button>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div>
+                <div class="sidebar-brand">
+                    <img src="{{ asset('images/capj.jpg') }}" alt="CAPTAiN J"
+                        onerror="this.src='https://ui-avatars.com/api/?name=CAPTAiN+J&background=random';">
+                    <h6>CAPTAiN J {{ ucfirst(auth()->user()->role) }}</h6>
+                </div>
+
+                <nav class="sidebar-nav">
+                    @if(auth()->user()->isAdmin())
+                        <a href="{{ route('profile.edit') }}" class="{{ request()->routeIs('profile.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-id-card"></i> <span>Profile</span>
+                        </a>
+                        <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                            <i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span>
+                        </a>
+                        <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-chart-line"></i> <span>Sales &amp; Reports</span>
+                        </a>
+                        <a href="{{ route('inventory.index') }}"
+                            class="{{ request()->routeIs('inventory.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-boxes-stacked"></i> <span>Inventory</span>
+                        </a>
+                        <a href="{{ route('users.index') }}" class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-users"></i> <span>Users</span>
+                        </a>
+                        <a href="{{ route('pos.index') }}" class="{{ request()->routeIs('pos.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-cash-register"></i> <span>Create Order</span>
+                        </a>
+                        <a href="{{ route('orders.index') }}" class="{{ request()->routeIs('orders.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-receipt"></i> <span>Orders</span>
+                        </a>
+                        <a href="{{ route('logs.index') }}" class="{{ request()->routeIs('logs.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-list-check"></i> <span>Activity Logs</span>
+                        </a>
+                        <a href="{{ route('settings.index') }}" class="{{ request()->routeIs('settings.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-gear"></i> <span>Settings</span>
+                        </a>
+                    @elseif(auth()->user()->role === 'staff')
+                        <a href="{{ route('profile.edit') }}" class="{{ request()->routeIs('profile.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-id-card"></i> <span>Profile</span>
+                        </a>
+                        <a href="{{ route('inventory.index') }}"
+                            class="{{ request()->routeIs('inventory.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-boxes-stacked"></i> <span>Inventory</span>
+                        </a>
+                        <a href="{{ route('pos.index') }}" class="{{ request()->routeIs('pos.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-cash-register"></i> <span>Create Order</span>
+                        </a>
+                        <a href="{{ route('orders.index') }}" class="{{ request()->routeIs('orders.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-receipt"></i> <span>Orders</span>
+                        </a>
+                    @endif
+                </nav>
             </div>
 
-            <nav class="sidebar-nav">
-                @if(auth()->user()->isAdmin())
-                    <a href="{{ route('profile.edit') }}" class="{{ request()->routeIs('profile.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-id-card"></i> <span>Profile</span>
-                    </a>
-                    <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                        <i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span>
-                    </a>
-                    <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-chart-line"></i> <span>Sales &amp; Reports</span>
-                    </a>
-                    <a href="{{ route('inventory.index') }}" class="{{ request()->routeIs('inventory.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-boxes-stacked"></i> <span>Inventory</span>
-                    </a>
-                    <a href="{{ route('users.index') }}" class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-users"></i> <span>Users</span>
-                    </a>
-                    <a href="{{ route('pos.index') }}" class="{{ request()->routeIs('pos.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-cash-register"></i> <span>Create Order</span>
-                    </a>
-                    <a href="{{ route('orders.index') }}" class="{{ request()->routeIs('orders.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-receipt"></i> <span>Orders</span>
-                    </a>
-                    <a href="{{ route('logs.index') }}" class="{{ request()->routeIs('logs.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-list-check"></i> <span>Activity Logs</span>
-                    </a>
-                    <a href="{{ route('settings.index') }}" class="{{ request()->routeIs('settings.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-gear"></i> <span>Settings</span>
-                    </a>
-                @elseif(auth()->user()->role === 'staff')
-                    <a href="{{ route('profile.edit') }}" class="{{ request()->routeIs('profile.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-id-card"></i> <span>Profile</span>
-                    </a>
-                    <a href="{{ route('inventory.index') }}" class="{{ request()->routeIs('inventory.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-boxes-stacked"></i> <span>Inventory</span>
-                    </a>
-                    <a href="{{ route('pos.index') }}" class="{{ request()->routeIs('pos.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-cash-register"></i> <span>Create Order</span>
-                    </a>
-                    <a href="{{ route('orders.index') }}" class="{{ request()->routeIs('orders.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-receipt"></i> <span>Orders</span>
-                    </a>
-                @endif
-            </nav>
-        </div>
-
-        <div class="sidebar-footer">
-            <div class="user-badge">
-                <div class="user-badge-icon"><i class="fa-solid fa-circle-user"></i></div>
-                <div class="user-badge-info">
-                    <div class="user-badge-label">Logged in as</div>
-                    <div class="user-badge-name">{{ auth()->user()->full_name ?? auth()->user()->username }}</div>
+            <div class="sidebar-footer">
+                <div class="user-badge">
+                    <div class="user-badge-icon"><i class="fa-solid fa-circle-user"></i></div>
+                    <div class="user-badge-info">
+                        <div class="user-badge-label">Logged in as</div>
+                        <div class="user-badge-name">{{ auth()->user()->full_name ?? auth()->user()->username }}</div>
+                    </div>
                 </div>
             </div>
-            <a href="/logout" class="btn-logout">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout
-            </a>
         </div>
-    </div>
     @endauth
 
     <!-- Main Content -->
     <div class="main-content" @guest style="margin-left: 0; width: 100%;" @endguest>
         @auth
-        <!-- Top Bar -->
-        <header class="topbar">
-            <div class="topbar-user">
-                <span class="topbar-user-label">Logged in as</span>
-                <span class="topbar-user-name">{{ auth()->user()->full_name ?? auth()->user()->username }}</span>
-            </div>
-            <a href="/logout" class="btn-logout-top">
-                <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
-            </a>
-        </header>
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div class="topbar-user">
+                    <span class="topbar-user-label">Logged in as</span>
+                    <span class="topbar-user-name">{{ auth()->user()->full_name ?? auth()->user()->username }}</span>
+                </div>
+                <a href="/logout" class="btn-logout-top">
+                    <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+                </a>
+            </header>
         @endauth
 
         <!-- Global Alerts Container -->
@@ -540,7 +554,7 @@
                 </div>
             @endif
         </div>
-        
+
         @yield('content')
     </div>
 
@@ -549,17 +563,17 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const btn = document.getElementById('hamburgerBtn');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
 
-            if(btn && sidebar && overlay) {
-                btn.addEventListener('click', function() {
+            if (btn && sidebar && overlay) {
+                btn.addEventListener('click', function () {
                     sidebar.classList.toggle('show');
                     overlay.classList.toggle('show');
                 });
-                overlay.addEventListener('click', function() {
+                overlay.addEventListener('click', function () {
                     sidebar.classList.remove('show');
                     overlay.classList.remove('show');
                 });
@@ -571,9 +585,9 @@
             const form = e.target;
             if (form && form.classList.contains('confirm-delete')) {
                 e.preventDefault(); // Prevent direct submission
-                
+
                 const message = form.getAttribute('data-confirm-message') || 'Are you sure you want to delete this?';
-                
+
                 Swal.fire({
                     title: 'Are you sure?',
                     text: message,
@@ -601,4 +615,5 @@
     </script>
     @stack('scripts')
 </body>
+
 </html>
