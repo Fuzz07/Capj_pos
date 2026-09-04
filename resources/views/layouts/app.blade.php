@@ -7,6 +7,29 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'CAPTAiN J POS System')</title>
 
+    @auth
+    <script>
+    (function () {
+        'use strict';
+        var serverToken  = "{{ session('auth_tab_token') }}";
+        var justLoggedIn = {{ session('just_logged_in') ? 'true' : 'false' }};
+        if (!serverToken) return;
+
+        var clientToken = sessionStorage.getItem('app_tab_session_token');
+
+        if (justLoggedIn) {
+            sessionStorage.setItem('app_tab_session_token', serverToken);
+            return;
+        }
+
+        if (!clientToken || clientToken !== serverToken) {
+            // Unverified tab opening protected page — redirect to login without destroying server session
+            window.location.replace("{{ route('login', ['reason' => 'new_tab']) }}");
+        }
+    })();
+    </script>
+    @endauth
+
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">

@@ -115,6 +115,24 @@
             <div class="alert alert-success small py-2 border-0 mb-4 rounded-3 shadow-sm">{{ session('status') }}</div>
         @endif
 
+        @if(request('reason') === 'new_tab')
+            <div class="alert alert-warning small py-2 border-0 mb-4 rounded-3 shadow-sm d-flex align-items-start gap-2">
+                <i class="fa-solid fa-shield-halved mt-1 text-warning"></i>
+                <div>
+                    <strong>Single Tab Access Policy</strong><br>
+                    You opened a new tab. Please log in here to access this tab, or return to your active tab.
+                </div>
+            </div>
+        @elseif(request('reason') === 'session_changed')
+            <div class="alert alert-info small py-2 border-0 mb-4 rounded-3 shadow-sm d-flex align-items-start gap-2">
+                <i class="fa-solid fa-circle-info mt-1 text-info"></i>
+                <div>
+                    <strong>Session Updated</strong><br>
+                    A new login session was initiated in another tab or device. Please log in again to continue here.
+                </div>
+            </div>
+        @endif
+
         @if($errors->any())
             <div class="alert alert-danger small py-2 border-0 mb-4 rounded-3 shadow-sm">
                 @foreach($errors->all() as $error)

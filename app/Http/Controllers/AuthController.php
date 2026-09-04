@@ -14,10 +14,11 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    public function showLogin()
+    public function showLogin(Request $request)
     {
-        if (Auth::check()) {
-            return redirect()->route('dashboard');
+        if (Auth::check() && !$request->has('reason') && !$request->has('new_tab')) {
+            $user = Auth::user();
+            return redirect()->route($user->isAdmin() ? 'dashboard' : 'pos.index');
         }
         return view('auth.login');
     }
@@ -55,6 +56,11 @@ class AuthController extends Controller
                 $user->update(['session_token' => $token]);
                 $request->session()->put('auth_session_token', $token);
             }
+
+            // Issue single-tab token for client tab isolation
+            $tabToken = Str::random(32);
+            $request->session()->put('auth_tab_token', $tabToken);
+            $request->session()->flash('just_logged_in', true);
 
             ActivityLog::create([
                 'user_id'     => $user->id,
