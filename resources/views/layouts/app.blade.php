@@ -510,8 +510,7 @@
                     @endif
                 </nav>
             </div>
-
-
+        </div>
     @endauth
 
         <!-- Main Content -->
