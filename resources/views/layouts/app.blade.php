@@ -127,20 +127,25 @@
         }
 
         .sidebar-footer {
-            padding: 1rem 0.75rem;
+            padding: 0.6rem 0.75rem;
             border-top: 1px solid rgba(255, 255, 255, 0.15);
             background: rgba(0, 0, 0, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
         }
 
         .user-badge {
             display: flex;
             align-items: center;
             gap: 0.6rem;
-            padding: 0.45rem 0.6rem;
+            padding: 0.4rem 0.55rem;
             background: rgba(255, 255, 255, 0.12);
             border-radius: 8px;
-            margin-bottom: 0;
             border: 1px solid rgba(255, 255, 255, 0.15);
+            flex: 1;
+            min-width: 0;
         }
 
         .user-badge-icon {
@@ -159,6 +164,7 @@
         .user-badge-info {
             overflow: hidden;
             text-align: left;
+            min-width: 0;
         }
 
         .user-badge-label {
@@ -177,6 +183,29 @@
             overflow: hidden;
             text-overflow: ellipsis;
             margin: 0;
+        }
+
+        .sidebar-footer .btn-logout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            padding: 0.4rem 0.65rem;
+            background: rgba(211, 47, 47, 0.25);
+            border: 1px solid rgba(211, 47, 47, 0.45);
+            border-radius: 8px;
+            color: #ffb3b3;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .sidebar-footer .btn-logout:hover {
+            background: rgba(211, 47, 47, 0.55);
+            color: #fff;
         }
 
         /* Top bar: sits above page content, holds the account actions on the right */
@@ -473,6 +502,9 @@
                     <div class="user-badge-name">{{ auth()->user()->full_name ?? auth()->user()->username }}</div>
                 </div>
             </div>
+            <a href="/logout" class="btn-logout">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </a>
         </div>
     </div>
     @endauth
