@@ -485,7 +485,7 @@
                             <i class="fa-solid fa-cash-register"></i> <span>Create Order</span>
                         </a>
                         <a href="{{ route('orders.index') }}" class="{{ request()->routeIs('orders.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-receipt"></i> <span>Orders</span>
+                            <i class="fa-solid fa-receipt"></i> <span>Orders History</span>
                         </a>
                         <a href="{{ route('logs.index') }}" class="{{ request()->routeIs('logs.*') ? 'active' : '' }}">
                             <i class="fa-solid fa-list-check"></i> <span>Activity Logs</span>
@@ -505,115 +505,106 @@
                             <i class="fa-solid fa-cash-register"></i> <span>Create Order</span>
                         </a>
                         <a href="{{ route('orders.index') }}" class="{{ request()->routeIs('orders.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-receipt"></i> <span>Orders</span>
+                            <i class="fa-solid fa-receipt"></i> <span>Orders History</span>
                         </a>
                     @endif
                 </nav>
             </div>
 
-            <div class="sidebar-footer">
-                <div class="user-badge">
-                    <div class="user-badge-icon"><i class="fa-solid fa-circle-user"></i></div>
-                    <div class="user-badge-info">
-                        <div class="user-badge-label">Logged in as</div>
-                        <div class="user-badge-name">{{ auth()->user()->full_name ?? auth()->user()->username }}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     @endauth
 
-    <!-- Main Content -->
-    <div class="main-content" @guest style="margin-left: 0; width: 100%;" @endguest>
-        @auth
-            <!-- Top Bar -->
-            <header class="topbar">
-                <div class="topbar-user">
-                    <span class="topbar-user-label">Logged in as</span>
-                    <span class="topbar-user-name">{{ auth()->user()->full_name ?? auth()->user()->username }}</span>
-                </div>
-                <a href="/logout" class="btn-logout-top">
-                    <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
-                </a>
-            </header>
-        @endauth
+        <!-- Main Content -->
+        <div class="main-content" @guest style="margin-left: 0; width: 100%;" @endguest>
+            @auth
+                <!-- Top Bar -->
+                <header class="topbar">
+                    <div class="topbar-user">
+                        <span class="topbar-user-label">Logged in as</span>
+                        <span class="topbar-user-name">{{ auth()->user()->full_name ?? auth()->user()->username }}</span>
+                    </div>
+                    <a href="/logout" class="btn-logout-top">
+                        <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+                    </a>
+                </header>
+            @endauth
 
-        <!-- Global Alerts Container -->
-        <div class="container-fluid px-4 mt-3">
-            @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
-                    <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
+            <!-- Global Alerts Container -->
+            <div class="container-fluid px-4 mt-3">
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
+                        <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
 
-            @if(session('error'))
-                <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm" role="alert">
-                    <i class="fa-solid fa-triangle-exclamation me-2"></i> {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
+                @if(session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm" role="alert">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i> {{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+            </div>
+
+            @yield('content')
         </div>
 
-        @yield('content')
-    </div>
+        <!-- Bootstrap 5 Bundle JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- SweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const btn = document.getElementById('hamburgerBtn');
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebarOverlay');
 
-    <!-- Bootstrap 5 Bundle JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const btn = document.getElementById('hamburgerBtn');
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
+                if (btn && sidebar && overlay) {
+                    btn.addEventListener('click', function () {
+                        sidebar.classList.toggle('show');
+                        overlay.classList.toggle('show');
+                    });
+                    overlay.addEventListener('click', function () {
+                        sidebar.classList.remove('show');
+                        overlay.classList.remove('show');
+                    });
+                }
+            });
 
-            if (btn && sidebar && overlay) {
-                btn.addEventListener('click', function () {
-                    sidebar.classList.toggle('show');
-                    overlay.classList.toggle('show');
-                });
-                overlay.addEventListener('click', function () {
-                    sidebar.classList.remove('show');
-                    overlay.classList.remove('show');
-                });
-            }
-        });
+            // Intercept any delete confirmation forms
+            document.addEventListener('submit', function (e) {
+                const form = e.target;
+                if (form && form.classList.contains('confirm-delete')) {
+                    e.preventDefault(); // Prevent direct submission
 
-        // Intercept any delete confirmation forms
-        document.addEventListener('submit', function (e) {
-            const form = e.target;
-            if (form && form.classList.contains('confirm-delete')) {
-                e.preventDefault(); // Prevent direct submission
+                    const message = form.getAttribute('data-confirm-message') || 'Are you sure you want to delete this?';
 
-                const message = form.getAttribute('data-confirm-message') || 'Are you sure you want to delete this?';
-
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: message,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#dc3545', // Brand styled red
-                    cancelButtonColor: '#6c757d', // Secondary gray
-                    confirmButtonText: '<i class="fa-solid fa-trash me-1"></i> Yes, Delete',
-                    cancelButtonText: 'Cancel',
-                    reverseButtons: true,
-                    background: '#ffffff',
-                    customClass: {
-                        popup: 'rounded-4 shadow',
-                        confirmButton: 'btn btn-danger px-4 fw-semibold',
-                        cancelButton: 'btn btn-light border px-4 fw-semibold me-2'
-                    },
-                    buttonsStyling: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
-                });
-            }
-        });
-    </script>
-    @stack('scripts')
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: message,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#dc3545', // Brand styled red
+                        cancelButtonColor: '#6c757d', // Secondary gray
+                        confirmButtonText: '<i class="fa-solid fa-trash me-1"></i> Yes, Delete',
+                        cancelButtonText: 'Cancel',
+                        reverseButtons: true,
+                        background: '#ffffff',
+                        customClass: {
+                            popup: 'rounded-4 shadow',
+                            confirmButton: 'btn btn-danger px-4 fw-semibold',
+                            cancelButton: 'btn btn-light border px-4 fw-semibold me-2'
+                        },
+                        buttonsStyling: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                }
+            });
+        </script>
+        @stack('scripts')
 </body>
 
 </html>
