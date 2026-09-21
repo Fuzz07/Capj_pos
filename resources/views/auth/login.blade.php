@@ -148,7 +148,10 @@
                 <label for="username" class="form-label fw-semibold small text-secondary">Username</label>
                 <div class="input-group">
                     <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-user"></i></span>
-                    <input type="text" name="username" id="username" class="form-control bg-light border-start-0" value="{{ old('username') }}" placeholder="Enter username" required autofocus>
+                    <input type="text" name="username" id="username" class="form-control bg-light border-start-0" value="{{ old('username') }}" placeholder="Enter username" required autofocus autocomplete="username" spellcheck="false" oninput="validateUsernameInput(this)">
+                </div>
+                <div id="usernameHint" class="invalid-feedback mt-1" style="display:none; font-size:0.8rem;">
+                    <i class="fa-solid fa-circle-exclamation me-1"></i>Only letters, numbers, underscores (_) and hyphens (-) are allowed.
                 </div>
             </div>
 
@@ -190,6 +193,26 @@ function togglePasswordVisibility() {
         passwordInput.type = 'password';
         icon.classList.remove('fa-eye-slash');
         icon.classList.add('fa-eye');
+    }
+}
+
+// Only allow: letters (a-z, A-Z), digits (0-9), underscore (_), hyphen (-)
+function validateUsernameInput(input) {
+    const original = input.value;
+    // Strip any character that is NOT alphanumeric, underscore, or hyphen
+    const cleaned = original.replace(/[^a-zA-Z0-9_\-]/g, '');
+    if (cleaned !== original) {
+        input.value = cleaned;
+        // Show inline hint
+        const hint = document.getElementById('usernameHint');
+        hint.style.display = 'block';
+        input.classList.add('is-invalid');
+        // Auto-hide hint after 2.5 s
+        clearTimeout(input._hintTimer);
+        input._hintTimer = setTimeout(() => {
+            hint.style.display = 'none';
+            input.classList.remove('is-invalid');
+        }, 2500);
     }
 }
 </script>

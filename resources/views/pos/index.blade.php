@@ -134,10 +134,10 @@
                      data-description="{{ strtolower($item->description ?? '') }}"
                      data-category="{{ strtolower($item->description ?? $item->name) }}">
                     <div class="item-card p-3 h-100 d-flex flex-column justify-content-between"
-                         onclick="addToCart({{ $item->id }}, '{{ addslashes($item->name) }}', {{ $item->price }}, {{ $item->stock_qty }})">
+                     onclick="addToCart({{ $item->id }}, '{{ addslashes($item->name) }}', {{ $item->price }}, {{ $item->stock_qty }})">
                         <div>
                             <div class="d-flex justify-content-between align-items-start mb-2">
-                                <span class="badge {{ $item->stock_qty > 5 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }} small">
+                                <span class="badge {{ $item->stock_qty > 5 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }} small" id="stock-badge-{{ $item->id }}">
                                     Stock: {{ $item->stock_qty }}
                                 </span>
                             </div>
@@ -288,17 +288,65 @@
     const TAKEOUT_FEE_PER_ITEMS = {{ max(1, (int) $takeoutFeePerItems) }};
 
     let cart = {};
+    // stockMap: tracks the ORIGINAL max stock for each item (set once on first add)
+    const stockMap = {};
+
+    function getAvailableStock(id) {
+        const original = stockMap[id] || 0;
+        const inCart   = cart[id] ? cart[id].qty : 0;
+        return original - inCart;
+    }
+
+    function updateStockBadge(id) {
+        const badge = document.getElementById('stock-badge-' + id);
+        if (!badge) return;
+        const card  = badge.closest('.item-card');
+        const available = getAvailableStock(id);
+        const original  = stockMap[id] || 0;
+
+        if (available <= 0) {
+            badge.className = 'badge bg-danger small';
+            badge.textContent = 'Out of Stock';
+            if (card) { card.style.opacity = '0.45'; card.style.pointerEvents = 'none'; }
+        } else if (available <= 5) {
+            badge.className = 'badge bg-warning-subtle text-warning small';
+            badge.textContent = `Stock: ${available}` + (cart[id] ? ` (in cart: ${cart[id].qty})` : '');
+            if (card) { card.style.opacity = ''; card.style.pointerEvents = ''; }
+        } else {
+            badge.className = 'badge bg-success-subtle text-success small';
+            badge.textContent = `Stock: ${available}` + (cart[id] ? ` (in cart: ${cart[id].qty})` : '');
+            if (card) { card.style.opacity = ''; card.style.pointerEvents = ''; }
+        }
+    }
+
+    function resetStockBadge(id) {
+        const badge = document.getElementById('stock-badge-' + id);
+        if (!badge) return;
+        const card  = badge.closest('.item-card');
+        const original = stockMap[id] || 0;
+        badge.className = original > 5 ? 'badge bg-success-subtle text-success small' : 'badge bg-danger-subtle text-danger small';
+        badge.textContent = `Stock: ${original}`;
+        if (card) { card.style.opacity = ''; card.style.pointerEvents = ''; }
+    }
 
     function addToCart(id, name, price, maxStock) {
+        // Record original stock once
+        if (!stockMap[id]) stockMap[id] = maxStock;
+
         if (!cart[id]) {
+            if (maxStock <= 0) {
+                Swal.fire({ icon: 'warning', title: 'Out of Stock', text: `"${name}" is currently out of stock.`, timer: 2000, showConfirmButton: false });
+                return;
+            }
             cart[id] = { id: id, name: name, price: price, qty: 1, maxStock: maxStock };
         } else {
-            if (cart[id].qty + 1 > maxStock) {
-                alert(`Cannot add more. Only ${maxStock} units available in stock.`);
+            if (cart[id].qty + 1 > stockMap[id]) {
+                Swal.fire({ icon: 'warning', title: 'Stock Limit Reached', text: `Only ${stockMap[id]} unit(s) of "${name}" available.`, timer: 2000, showConfirmButton: false });
                 return;
             }
             cart[id].qty++;
         }
+        updateStockBadge(id);
         renderCart();
     }
 
@@ -307,10 +355,12 @@
             let newQty = cart[id].qty + delta;
             if (newQty <= 0) {
                 delete cart[id];
-            } else if (newQty > cart[id].maxStock) {
-                alert(`Stock limit reached (${cart[id].maxStock}).`);
+                resetStockBadge(id);
+            } else if (newQty > stockMap[id]) {
+                Swal.fire({ icon: 'warning', title: 'Stock Limit', text: `Stock limit reached (${stockMap[id]}).`, timer: 2000, showConfirmButton: false });
             } else {
                 cart[id].qty = newQty;
+                updateStockBadge(id);
             }
             renderCart();
         }
@@ -318,10 +368,13 @@
 
     function removeFromCart(id) {
         delete cart[id];
+        resetStockBadge(id);
         renderCart();
     }
 
     function clearCart() {
+        // Restore all stock badges
+        Object.keys(cart).forEach(id => resetStockBadge(id));
         cart = {};
         renderCart();
     }

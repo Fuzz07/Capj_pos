@@ -74,9 +74,9 @@
                         </td>
                         <td>
                             <span class="badge 
-                                {{ $o->status === 'completed' ? 'bg-success' : ($o->status === 'pending' ? 'bg-warning text-dark' : 'bg-danger') }} badge-status">
-                                {{ ucfirst($o->status) }}
-                            </span>
+                            {{ $o->status === 'completed' ? 'bg-success' : ($o->status === 'voided' ? 'bg-secondary' : ($o->status === 'pending' ? 'bg-warning text-dark' : 'bg-danger')) }} badge-status">
+                            {{ ucfirst($o->status) }}
+                        </span>
                         </td>
                         <td class="text-muted small">{{ $o->created_at->format('M j, Y • h:i A') }}</td>
                         <td>
@@ -87,6 +87,16 @@
                             <a href="{{ route('orders.show', $o->id) }}" class="btn btn-sm btn-light text-primary border me-1" title="View Receipt">
                                 <i class="fa-solid fa-eye me-1"></i> View
                             </a>
+
+                            @if(auth()->user()->isAdmin() && $o->status === 'completed')
+                            <button type="button"
+                                class="btn btn-sm btn-light text-warning border me-1"
+                                title="Void Order"
+                                onclick="confirmVoid({{ $o->id }}, '{{ route('orders.void', $o->id) }}')"
+                            >
+                                <i class="fa-solid fa-rotate-left me-1"></i> Void
+                            </button>
+                            @endif
 
                             @if(auth()->user()->isAdmin())
                             <form action="{{ route('orders.destroy', $o->id) }}" method="POST" class="d-inline confirm-delete" data-confirm-message="Are you sure you want to delete Order #{{ $o->id }}?">
@@ -119,6 +129,7 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.getElementById('orderSearch').addEventListener('keyup', function() {
         const value = this.value.toLowerCase();
@@ -127,5 +138,31 @@
             row.style.display = text.includes(value) ? '' : 'none';
         });
     });
+
+    function confirmVoid(orderId, voidUrl) {
+        Swal.fire({
+            title: 'Void Order #' + orderId + '?',
+            html: 'This will <strong>restore the stock</strong> of all items in this order and mark it as <strong>Voided</strong>.<br><br>This action cannot be undone.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#e67e22',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="fa-solid fa-rotate-left me-1"></i> Yes, Void It',
+            cancelButtonText: 'Cancel',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = voidUrl;
+                const csrf = document.createElement('input');
+                csrf.type = 'hidden';
+                csrf.name = '_token';
+                csrf.value = '{{ csrf_token() }}';
+                form.appendChild(csrf);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
 </script>
 @endpush

@@ -96,6 +96,7 @@ Route::middleware(['auth', 'single.session'])->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
+    Route::post('/orders/{order}/void', [OrderController::class, 'void'])->name('orders.void')->middleware('app.admin');
 
     // Logs
     Route::get('/logs', function () {
