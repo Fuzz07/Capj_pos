@@ -74,7 +74,7 @@
                         </td>
                         <td>
                             <span class="badge 
-                            {{ $o->status === 'completed' ? 'bg-success' : ($o->status === 'voided' ? 'bg-secondary' : ($o->status === 'pending' ? 'bg-warning text-dark' : 'bg-danger')) }} badge-status">
+                            {{ $o->status === 'completed' ? 'bg-success' : (in_array($o->status, ['voided', 'cancelled']) ? 'bg-secondary' : ($o->status === 'pending' ? 'bg-warning text-dark' : 'bg-danger')) }} badge-status">
                             {{ ucfirst($o->status) }}
                         </span>
                         </td>
