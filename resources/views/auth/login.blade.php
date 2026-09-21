@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - CAPTAiN J POS System</title>
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="shortcut icon" href="/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -20,6 +22,7 @@
             justify-content: center;
             padding: 1rem;
         }
+
         .login-card {
             background: #ffffff;
             border-radius: 1.25rem;
@@ -29,6 +32,7 @@
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         .login-header {
             background: linear-gradient(135deg, #ff1e1e 0%, #b30000 100%);
             color: #ffffff;
@@ -36,6 +40,7 @@
             text-align: center;
             position: relative;
         }
+
         .login-header::after {
             content: '';
             position: absolute;
@@ -46,23 +51,27 @@
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(5px);
         }
+
         .form-control {
             border-radius: 0.5rem;
             padding: 0.65rem 1rem;
             border: 1px solid #e2e8f0;
             transition: all 0.2s ease-in-out;
         }
+
         .form-control:focus {
             border-color: #f10000;
             box-shadow: 0 0 0 4px rgba(241, 0, 0, 0.15);
             background-color: #fff;
         }
+
         .input-group-text {
             border-radius: 0.5rem;
             border: 1px solid #e2e8f0;
             background-color: #f8fafc;
             color: #64748b;
         }
+
         .btn-login {
             background: linear-gradient(135deg, #ff1e1e 0%, #b30000 100%);
             border: none;
@@ -73,26 +82,31 @@
             box-shadow: 0 4px 6px -1px rgba(241, 0, 0, 0.2), 0 2px 4px -1px rgba(241, 0, 0, 0.1);
             transition: all 0.2s ease-in-out;
         }
+
         .btn-login:hover {
             transform: translateY(-1px);
             box-shadow: 0 10px 15px -3px rgba(241, 0, 0, 0.3), 0 4px 6px -2px rgba(241, 0, 0, 0.2);
             opacity: 0.95;
             color: #ffffff;
         }
+
         .btn-login:active {
             transform: translateY(1px);
         }
+
         .brand-logo {
             width: 55px;
             height: 55px;
             border-radius: 50%;
             border: 3px solid #ffffff;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
             object-fit: cover;
         }
+
         .text-primary {
             color: #f10000 !important;
         }
+
         .text-gradient {
             background: linear-gradient(135deg, #ff1e1e 0%, #b30000 100%);
             -webkit-background-clip: text;
@@ -100,232 +114,246 @@
         }
     </style>
 </head>
+
 <body>
 
-<div class="login-card">
-    <div class="login-header d-flex flex-column align-items-center justify-content-center">
-        <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
-            <img src="{{ asset('images/capj.jpg') }}" alt="CAPTAiN J" class="brand-logo" onerror="this.src='https://ui-avatars.com/api/?name=CAPTAiN+J&background=random';">
-            <h2 class="fw-bold m-0 text-white" style="font-size: 2rem; letter-spacing: 0.5px;">CAPTAiN J</h2>
+    <div class="login-card">
+        <div class="login-header d-flex flex-column align-items-center justify-content-center">
+            <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
+                <img src="{{ asset('images/capj.jpg') }}" alt="CAPTAiN J" class="brand-logo"
+                    onerror="this.src='https://ui-avatars.com/api/?name=CAPTAiN+J&background=random';">
+                <h2 class="fw-bold m-0 text-white" style="font-size: 2rem; letter-spacing: 0.5px;">CAPTAiN J</h2>
+            </div>
+            <p class="small text-white-50 m-0 mt-1">Sign in to your account</p>
         </div>
-        <p class="small text-white-50 m-0 mt-1">Sign in to your account</p>
-    </div>
 
-    <div class="p-4 p-md-5">
-        @if(session('status'))
-            <div class="alert alert-success small py-2 border-0 mb-4 rounded-3 shadow-sm">{{ session('status') }}</div>
-        @endif
+        <div class="p-4 p-md-5">
+            @if(session('status'))
+                <div class="alert alert-success small py-2 border-0 mb-4 rounded-3 shadow-sm">{{ session('status') }}</div>
+            @endif
 
-        @if(request('reason') === 'new_tab')
-            <div class="alert alert-warning small py-2 border-0 mb-4 rounded-3 shadow-sm d-flex align-items-start gap-2">
-                <i class="fa-solid fa-shield-halved mt-1 text-warning"></i>
-                <div>
-                    <strong>Single Tab Access Policy</strong><br>
-                    You opened a new tab. Please log in here to access this tab, or return to your active tab.
-                </div>
-            </div>
-        @elseif(request('reason') === 'session_changed')
-            <div class="alert alert-info small py-2 border-0 mb-4 rounded-3 shadow-sm d-flex align-items-start gap-2">
-                <i class="fa-solid fa-circle-info mt-1 text-info"></i>
-                <div>
-                    <strong>Session Updated</strong><br>
-                    A new login session was initiated in another tab or device. Please log in again to continue here.
-                </div>
-            </div>
-        @endif
-
-        @if($errors->any())
-            <div class="alert alert-danger small py-2 border-0 mb-4 rounded-3 shadow-sm">
-                @foreach($errors->all() as $error)
-                    <div class="d-flex align-items-center mb-1"><i class="fa-solid fa-circle-exclamation me-2"></i> {{ $error }}</div>
-                @endforeach
-                @if($errors->has('unverified'))
-                    <div class="mt-2 pt-2 border-top border-danger border-opacity-25">
-                        <a href="{{ route('email.verify') }}" class="btn btn-sm btn-outline-danger w-100 fw-semibold">
-                            <i class="fa-solid fa-envelope-circle-check me-1"></i> Enter Verification OTP Code
-                        </a>
+            @if(request('reason') === 'new_tab')
+                <div
+                    class="alert alert-warning small py-2 border-0 mb-4 rounded-3 shadow-sm d-flex align-items-start gap-2">
+                    <i class="fa-solid fa-shield-halved mt-1 text-warning"></i>
+                    <div>
+                        <strong>Single Tab Access Policy</strong><br>
+                        You opened a new tab. Please log in here to access this tab, or return to your active tab.
                     </div>
-                @endif
-            </div>
-        @endif
+                </div>
+            @elseif(request('reason') === 'session_changed')
+                <div class="alert alert-info small py-2 border-0 mb-4 rounded-3 shadow-sm d-flex align-items-start gap-2">
+                    <i class="fa-solid fa-circle-info mt-1 text-info"></i>
+                    <div>
+                        <strong>Session Updated</strong><br>
+                        A new login session was initiated in another tab or device. Please log in again to continue here.
+                    </div>
+                </div>
+            @endif
 
-        <form action="{{ route('login') }}" method="POST" id="loginForm" onsubmit="return validateLoginForm(event)">
-            @csrf
-            <div class="mb-3">
-                <label for="username" class="form-label fw-semibold small text-secondary">Username</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-user"></i></span>
-                    <input type="text" name="username" id="username" class="form-control bg-light border-start-0" value="{{ old('username') }}" placeholder="Enter username (lowercase)" required autofocus autocomplete="username" spellcheck="false" oninput="validateUsernameInput(this)" onblur="validateUsernameBlur(this)">
+            @if($errors->any())
+                <div class="alert alert-danger small py-2 border-0 mb-4 rounded-3 shadow-sm">
+                    @foreach($errors->all() as $error)
+                        <div class="d-flex align-items-center mb-1"><i class="fa-solid fa-circle-exclamation me-2"></i>
+                            {{ $error }}</div>
+                    @endforeach
+                    @if($errors->has('unverified'))
+                        <div class="mt-2 pt-2 border-top border-danger border-opacity-25">
+                            <a href="{{ route('email.verify') }}" class="btn btn-sm btn-outline-danger w-100 fw-semibold">
+                                <i class="fa-solid fa-envelope-circle-check me-1"></i> Enter Verification OTP Code
+                            </a>
+                        </div>
+                    @endif
                 </div>
-                <div id="usernameHint" class="invalid-feedback mt-1" style="display:none; font-size:0.8rem;">
-                    <i class="fa-solid fa-circle-exclamation me-1"></i><span id="usernameHintText">Usernames must be lowercase only (e.g. 'admin', not 'Admin').</span>
-                </div>
-            </div>
+            @endif
 
-            <div class="mb-3">
-                <label for="password" class="form-label fw-semibold small text-secondary">Password</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-lock"></i></span>
-                    <input type="password" name="password" id="password" class="form-control bg-light border-start-0 border-end-0" placeholder="Enter password (min. 6 characters)" required autocomplete="current-password" oninput="validatePasswordInput(this)" onblur="validatePasswordBlur(this)">
-                    <button type="button" class="input-group-text bg-light border-start-0 text-secondary" id="togglePasswordBtn" onclick="togglePasswordVisibility()" style="cursor: pointer;" title="Show/Hide Password">
-                        <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
-                    </button>
+            <form action="{{ route('login') }}" method="POST" id="loginForm" onsubmit="return validateLoginForm(event)">
+                @csrf
+                <div class="mb-3">
+                    <label for="username" class="form-label fw-semibold small text-secondary">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-user"></i></span>
+                        <input type="text" name="username" id="username" class="form-control bg-light border-start-0"
+                            value="{{ old('username') }}" placeholder="Enter username (lowercase)" required autofocus
+                            autocomplete="username" spellcheck="false" oninput="validateUsernameInput(this)"
+                            onblur="validateUsernameBlur(this)">
+                    </div>
+                    <div id="usernameHint" class="invalid-feedback mt-1" style="display:none; font-size:0.8rem;">
+                        <i class="fa-solid fa-circle-exclamation me-1"></i><span id="usernameHintText">Usernames.</span>
+                    </div>
                 </div>
-                <div id="passwordHint" class="invalid-feedback mt-1" style="display:none; font-size:0.8rem;">
-                    <i class="fa-solid fa-circle-exclamation me-1"></i><span id="passwordHintText">Password must be at least 6 characters long.</span>
-                </div>
-            </div>
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input shadow-sm" id="remember" name="remember">
-                    <label class="form-check-label small text-muted" for="remember">Remember me</label>
+                <div class="mb-3">
+                    <label for="password" class="form-label fw-semibold small text-secondary">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-lock"></i></span>
+                        <input type="password" name="password" id="password"
+                            class="form-control bg-light border-start-0 border-end-0"
+                            placeholder="Enter password (min. 6 characters)" required autocomplete="current-password"
+                            oninput="validatePasswordInput(this)" onblur="validatePasswordBlur(this)">
+                        <button type="button" class="input-group-text bg-light border-start-0 text-secondary"
+                            id="togglePasswordBtn" onclick="togglePasswordVisibility()" style="cursor: pointer;"
+                            title="Show/Hide Password">
+                            <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
+                        </button>
+                    </div>
+                    <div id="passwordHint" class="invalid-feedback mt-1" style="display:none; font-size:0.8rem;">
+                        <i class="fa-solid fa-circle-exclamation me-1"></i><span id="passwordHintText">Password.</span>
+                    </div>
                 </div>
-                <a href="{{ route('password.request') }}" class="small text-decoration-none text-primary fw-semibold">Forgot password?</a>
-            </div>
 
-            <button type="submit" class="btn btn-login w-100 mb-3 shadow" id="loginBtn">
-                <i class="fa-solid fa-right-to-bracket me-2"></i> Log In
-            </button>
-        </form>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input shadow-sm" id="remember" name="remember">
+                        <label class="form-check-label small text-muted" for="remember">Remember me</label>
+                    </div>
+                    <a href="{{ route('password.request') }}"
+                        class="small text-decoration-none text-primary fw-semibold">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-login w-100 mb-3 shadow" id="loginBtn">
+                    <i class="fa-solid fa-right-to-bracket me-2"></i> Log In
+                </button>
+            </form>
+        </div>
     </div>
-</div>
 
-<script>
-function togglePasswordVisibility() {
-    const passwordInput = document.getElementById('password');
-    const icon = document.getElementById('togglePasswordIcon');
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        passwordInput.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-    }
-}
-
-// Enforce lowercase usernames and avoid uppercase letters (e.g. 'Admin' -> 'admin')
-function validateUsernameInput(input) {
-    const original = input.value;
-    const hint = document.getElementById('usernameHint');
-    const hintText = document.getElementById('usernameHintText');
-
-    const hasUppercase = /[A-Z]/.test(original);
-    const hasDisallowed = /[^a-zA-Z0-9_\-]/.test(original);
-
-    // Only allow lowercase letters, digits, underscore, hyphen
-    const cleaned = original.toLowerCase().replace(/[^a-z0-9_\-]/g, '');
-
-    if (cleaned !== original) {
-        input.value = cleaned;
-        if (hasUppercase) {
-            hintText.innerText = "Usernames must be lowercase only (e.g. 'admin', not 'Admin'). Uppercase letters are not allowed.";
-        } else if (hasDisallowed) {
-            hintText.innerText = "Spaces and special characters are not allowed in usernames.";
+    <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const icon = document.getElementById('togglePasswordIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
         }
-        hint.style.display = 'block';
-        input.classList.add('is-invalid');
 
-        clearTimeout(input._hintTimer);
-        input._hintTimer = setTimeout(() => {
-            hint.style.display = 'none';
-            input.classList.remove('is-invalid');
-        }, 3000);
-    } else if (cleaned.length > 0) {
-        hint.style.display = 'none';
-        input.classList.remove('is-invalid');
-    }
-}
+        // Enforce lowercase usernames and avoid uppercase letters (e.g. 'Admin' -> 'admin')
+        function validateUsernameInput(input) {
+            const original = input.value;
+            const hint = document.getElementById('usernameHint');
+            const hintText = document.getElementById('usernameHintText');
 
-function validateUsernameBlur(input) {
-    const hint = document.getElementById('usernameHint');
-    const hintText = document.getElementById('usernameHintText');
-    if (!input.value.trim()) {
-        hintText.innerText = "Username cannot be empty.";
-        hint.style.display = 'block';
-        input.classList.add('is-invalid');
-    }
-}
+            const hasUppercase = /[A-Z]/.test(original);
+            const hasDisallowed = /[^a-zA-Z0-9_\-]/.test(original);
 
-// Password input validation: enforce minimum 6 characters and no spaces
-function validatePasswordInput(input) {
-    const val = input.value;
-    const hint = document.getElementById('passwordHint');
-    const hintText = document.getElementById('passwordHintText');
+            // Only allow lowercase letters, digits, underscore, hyphen
+            const cleaned = original.toLowerCase().replace(/[^a-z0-9_\-]/g, '');
 
-    // Strip accidental spaces
-    if (/\s/.test(val)) {
-        input.value = val.replace(/\s/g, '');
-        hintText.innerText = "Spaces are not allowed in passwords.";
-        hint.style.display = 'block';
-        input.classList.add('is-invalid');
-        clearTimeout(input._pTimer);
-        input._pTimer = setTimeout(() => {
-            if (input.value.length >= 6) {
+            if (cleaned !== original) {
+                input.value = cleaned;
+                if (hasUppercase) {
+                    hintText.innerText = "Usernames must be lowercase only (e.g. 'admin', not 'Admin'). Uppercase letters are not allowed.";
+                } else if (hasDisallowed) {
+                    hintText.innerText = "Spaces and special characters are not allowed in usernames.";
+                }
+                hint.style.display = 'block';
+                input.classList.add('is-invalid');
+
+                clearTimeout(input._hintTimer);
+                input._hintTimer = setTimeout(() => {
+                    hint.style.display = 'none';
+                    input.classList.remove('is-invalid');
+                }, 3000);
+            } else if (cleaned.length > 0) {
                 hint.style.display = 'none';
                 input.classList.remove('is-invalid');
             }
-        }, 2000);
-        return;
-    }
+        }
 
-    if (val.length > 0 && val.length < 6) {
-        hintText.innerText = `Password must be at least 6 characters long (${val.length}/6 entered).`;
-        hint.style.display = 'block';
-        input.classList.add('is-invalid');
-    } else {
-        hint.style.display = 'none';
-        input.classList.remove('is-invalid');
-    }
-}
+        function validateUsernameBlur(input) {
+            const hint = document.getElementById('usernameHint');
+            const hintText = document.getElementById('usernameHintText');
+            if (!input.value.trim()) {
+                hintText.innerText = "Username cannot be empty.";
+                hint.style.display = 'block';
+                input.classList.add('is-invalid');
+            }
+        }
 
-function validatePasswordBlur(input) {
-    const hint = document.getElementById('passwordHint');
-    const hintText = document.getElementById('passwordHintText');
-    if (!input.value) {
-        hintText.innerText = "Password cannot be empty.";
-        hint.style.display = 'block';
-        input.classList.add('is-invalid');
-    } else if (input.value.length < 6) {
-        hintText.innerText = `Password must be at least 6 characters long (${input.value.length}/6 entered).`;
-        hint.style.display = 'block';
-        input.classList.add('is-invalid');
-    }
-}
+        // Password input validation: enforce minimum 6 characters and no spaces
+        function validatePasswordInput(input) {
+            const val = input.value;
+            const hint = document.getElementById('passwordHint');
+            const hintText = document.getElementById('passwordHintText');
 
-// Form-level validation before submit
-function validateLoginForm(e) {
-    const uInput = document.getElementById('username');
-    const pInput = document.getElementById('password');
-    let valid = true;
+            // Strip accidental spaces
+            if (/\s/.test(val)) {
+                input.value = val.replace(/\s/g, '');
+                hintText.innerText = "Spaces are not allowed in passwords.";
+                hint.style.display = 'block';
+                input.classList.add('is-invalid');
+                clearTimeout(input._pTimer);
+                input._pTimer = setTimeout(() => {
+                    if (input.value.length >= 6) {
+                        hint.style.display = 'none';
+                        input.classList.remove('is-invalid');
+                    }
+                }, 2000);
+                return;
+            }
 
-    if (!uInput.value.trim()) {
-        uInput.classList.add('is-invalid');
-        const uHint = document.getElementById('usernameHint');
-        document.getElementById('usernameHintText').innerText = "Please enter your username.";
-        uHint.style.display = 'block';
-        uInput.focus();
-        valid = false;
-    }
+            if (val.length > 0 && val.length < 6) {
+                hintText.innerText = `Password must be at least 6 characters long (${val.length}/6 entered).`;
+                hint.style.display = 'block';
+                input.classList.add('is-invalid');
+            } else {
+                hint.style.display = 'none';
+                input.classList.remove('is-invalid');
+            }
+        }
 
-    if (!pInput.value || pInput.value.length < 6) {
-        pInput.classList.add('is-invalid');
-        const pHint = document.getElementById('passwordHint');
-        document.getElementById('passwordHintText').innerText = "Password must be at least 6 characters long.";
-        pHint.style.display = 'block';
-        if (valid) pInput.focus();
-        valid = false;
-    }
+        function validatePasswordBlur(input) {
+            const hint = document.getElementById('passwordHint');
+            const hintText = document.getElementById('passwordHintText');
+            if (!input.value) {
+                hintText.innerText = "Password cannot be empty.";
+                hint.style.display = 'block';
+                input.classList.add('is-invalid');
+            } else if (input.value.length < 6) {
+                hintText.innerText = `Password must be at least 6 characters long (${input.value.length}/6 entered).`;
+                hint.style.display = 'block';
+                input.classList.add('is-invalid');
+            }
+        }
 
-    if (!valid) {
-        e.preventDefault();
-        return false;
-    }
-    return true;
-}
-</script>
+        // Form-level validation before submit
+        function validateLoginForm(e) {
+            const uInput = document.getElementById('username');
+            const pInput = document.getElementById('password');
+            let valid = true;
+
+            if (!uInput.value.trim()) {
+                uInput.classList.add('is-invalid');
+                const uHint = document.getElementById('usernameHint');
+                document.getElementById('usernameHintText').innerText = "Please enter your username.";
+                uHint.style.display = 'block';
+                uInput.focus();
+                valid = false;
+            }
+
+            if (!pInput.value || pInput.value.length < 6) {
+                pInput.classList.add('is-invalid');
+                const pHint = document.getElementById('passwordHint');
+                document.getElementById('passwordHintText').innerText = "Password must be at least 6 characters long.";
+                pHint.style.display = 'block';
+                if (valid) pInput.focus();
+                valid = false;
+            }
+
+            if (!valid) {
+                e.preventDefault();
+                return false;
+            }
+            return true;
+        }
+    </script>
 
 </body>
+
 </html>
