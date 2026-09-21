@@ -44,43 +44,66 @@ class AuthController extends Controller
             ])->onlyInput('username');
         }
 
-        if (Auth::attempt(['username' => $credentials['username'], 'password' => $credentials['password']], $request->boolean('remember'))) {
-            RateLimiter::clear($throttleKey);
-            $request->session()->regenerate();
+        // 1. Look up user by username
+        $user = User::where('username', $credentials['username'])->first();
 
-            $user = Auth::user();
-
-            // Single-session tracking: issue a fresh token for this login session
-            if (Schema::hasColumn('users', 'session_token')) {
-                $token = Str::random(64);
-                $user->update(['session_token' => $token]);
-                $request->session()->put('auth_session_token', $token);
-            }
-
-            // Issue single-tab token for client tab isolation
-            $tabToken = Str::random(32);
-            $request->session()->put('auth_tab_token', $tabToken);
-            $request->session()->flash('just_logged_in', true);
-
-            ActivityLog::create([
-                'user_id'     => $user->id,
-                'action'      => 'USER_LOGIN',
-                'description' => "User logged in: " . $user->username,
-            ]);
-
-            $targetRoute = $user->isAdmin() ? 'dashboard' : 'pos.index';
-            return redirect()->route($targetRoute);
+        // 2. Strict case-sensitive match check:
+        // In MySQL, 'Admin' matches 'admin' because default collations are case-insensitive.
+        // We enforce exact case in PHP so typing uppercase 'Admin' will NOT log in as 'admin'.
+        if (!$user || $user->username !== $credentials['username']) {
+            RateLimiter::hit($throttleKey, $lockoutSeconds);
+            $remaining = RateLimiter::remaining($throttleKey, $maxAttempts);
+            return back()->withErrors([
+                'username' => $remaining > 0
+                    ? "Invalid username or password. Usernames are case-sensitive (e.g. 'admin', not 'Admin'). You have {$remaining} " . ($remaining === 1 ? 'attempt' : 'attempts') . " remaining."
+                    : "Too many failed login attempts. Login is now locked — please wait " . ((int) round($lockoutSeconds / 60)) . " minutes before trying again.",
+            ])->onlyInput('username');
         }
 
-        RateLimiter::hit($throttleKey, $lockoutSeconds);
-        $remaining = RateLimiter::remaining($throttleKey, $maxAttempts);
-        $lockMinutes = (int) round($lockoutSeconds / 60);
+        // 3. Strict password hash check
+        if (!Hash::check($credentials['password'], $user->password)) {
+            RateLimiter::hit($throttleKey, $lockoutSeconds);
+            $remaining = RateLimiter::remaining($throttleKey, $maxAttempts);
+            return back()->withErrors([
+                'username' => $remaining > 0
+                    ? "Invalid username or password credentials. You have {$remaining} " . ($remaining === 1 ? 'attempt' : 'attempts') . " remaining."
+                    : "Too many failed login attempts. Login is now locked — please wait " . ((int) round($lockoutSeconds / 60)) . " minutes before trying again.",
+            ])->onlyInput('username');
+        }
 
-        return back()->withErrors([
-            'username' => $remaining > 0
-                ? "Invalid username or password credentials. You have {$remaining} " . ($remaining === 1 ? 'attempt' : 'attempts') . " remaining."
-                : "Too many failed login attempts. Login is now locked — please wait {$lockMinutes} " . ($lockMinutes === 1 ? 'minute' : 'minutes') . " before trying again.",
-        ])->onlyInput('username');
+        // 4. Verification check: ONLY VERIFIED ACCOUNTS CAN LOG IN!
+        if (empty($user->email_verified_at)) {
+            return back()->withErrors([
+                'username' => "Your account ({$user->username}) is unverified. Only verified accounts are permitted to log in. Please verify your email with the OTP code or contact an administrator.",
+                'unverified' => true,
+            ])->onlyInput('username');
+        }
+
+        // 5. Successful login
+        RateLimiter::clear($throttleKey);
+        Auth::login($user, $request->boolean('remember'));
+        $request->session()->regenerate();
+
+        // Single-session tracking: issue a fresh token for this login session
+        if (Schema::hasColumn('users', 'session_token')) {
+            $token = Str::random(64);
+            $user->update(['session_token' => $token]);
+            $request->session()->put('auth_session_token', $token);
+        }
+
+        // Issue single-tab token for client tab isolation
+        $tabToken = Str::random(32);
+        $request->session()->put('auth_tab_token', $tabToken);
+        $request->session()->flash('just_logged_in', true);
+
+        ActivityLog::create([
+            'user_id'     => $user->id,
+            'action'      => 'USER_LOGIN',
+            'description' => "User logged in: " . $user->username,
+        ]);
+
+        $targetRoute = $user->isAdmin() ? 'dashboard' : 'pos.index';
+        return redirect()->route($targetRoute);
     }
 
     public function logout(Request $request)
