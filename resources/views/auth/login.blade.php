@@ -155,7 +155,8 @@
                 <div class="alert alert-danger small py-2 border-0 mb-4 rounded-3 shadow-sm">
                     @foreach($errors->all() as $error)
                         <div class="d-flex align-items-center mb-1"><i class="fa-solid fa-circle-exclamation me-2"></i>
-                            {{ $error }}</div>
+                            {{ $error }}
+                        </div>
                     @endforeach
                     @if($errors->has('unverified'))
                         <div class="mt-2 pt-2 border-top border-danger border-opacity-25">
@@ -248,7 +249,7 @@
             if (cleaned !== original) {
                 input.value = cleaned;
                 if (hasUppercase) {
-                    hintText.innerText = "Usernames must be lowercase only (e.g. 'admin', not 'Admin'). Uppercase letters are not allowed.";
+                    hintText.innerText = "Usernames.";
                 } else if (hasDisallowed) {
                     hintText.innerText = "Spaces and special characters are not allowed in usernames.";
                 }
