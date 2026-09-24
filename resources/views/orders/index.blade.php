@@ -30,6 +30,53 @@
     .nav-tabs .nav-link:hover:not(.active) {
         border-bottom-color: #cbd5e1;
     }
+
+    /* Clean payment method icon pill */
+    .pay-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.3em 0.65em;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+    }
+    .pay-badge-gcash {
+        background: #e8f0ff;
+        color: #1a56db;
+        border: 1px solid #c0d3ff;
+    }
+    .pay-badge-gcash .pay-icon {
+        background: #1a56db;
+        color: #fff;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.65rem;
+        flex-shrink: 0;
+    }
+    .pay-badge-cash {
+        background: #f0fdf4;
+        color: #16a34a;
+        border: 1px solid #bbf7d0;
+    }
+    .pay-badge-cash .pay-icon {
+        background: #16a34a;
+        color: #fff;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.65rem;
+        flex-shrink: 0;
+    }
 </style>
 @endpush
 
@@ -103,9 +150,15 @@
                         <td class="fw-bold text-primary fs-6">₱{{ number_format($o->total_amount, 2) }}</td>
                         <td>
                             @if(strtolower($o->payment_method) === 'gcash')
-                                <span class="badge" style="background:#0057a3; font-weight: 600;">📱 GCash</span>
+                                <span class="pay-badge pay-badge-gcash">
+                                    <span class="pay-icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
+                                    GCash
+                                </span>
                             @else
-                                <span class="badge bg-success-subtle text-success border border-success-subtle fw-semibold">💵 Cash</span>
+                                <span class="pay-badge pay-badge-cash">
+                                    <span class="pay-icon"><i class="fa-solid fa-money-bill"></i></span>
+                                    Cash
+                                </span>
                             @endif
                         </td>
                         <td>
