@@ -19,10 +19,10 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-// Redirect root to dashboard or login
+// Public Landing Page
 Route::get('/', function () {
-    return redirect()->route(auth()->check() ? 'dashboard' : 'login');
-});
+    return view('welcome');
+})->name('landing');
 
 // Login Routes (handled with custom single-tab awareness in AuthController)
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -95,8 +95,10 @@ Route::middleware(['auth', 'single.session'])->group(function () {
     // Orders
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
-    Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
-    Route::post('/orders/{order}/void', [OrderController::class, 'void'])->name('orders.void')->middleware('app.admin');
+    Route::post('/orders/{order}/void', [OrderController::class, 'void'])->name('orders.void');
+    Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy')->middleware('app.admin');
+    Route::post('/orders/{id}/restore', [OrderController::class, 'restore'])->name('orders.restore')->middleware('app.admin');
+    Route::delete('/orders/{id}/force-delete', [OrderController::class, 'forceDelete'])->name('orders.force-delete')->middleware('app.admin');
 
     // Logs
     Route::get('/logs', function () {

@@ -103,6 +103,11 @@
             object-fit: cover;
         }
 
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-ms-clear {
+            display: none;
+        }
+
         .text-primary {
             color: #f10000 !important;
         }
@@ -175,7 +180,7 @@
                     <div class="input-group">
                         <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-user"></i></span>
                         <input type="text" name="username" id="username" class="form-control bg-light border-start-0"
-                            value="{{ old('username') }}" placeholder="Enter username (lowercase)" required autofocus
+                            value="{{ old('username') }}" placeholder="Enter username" required autofocus
                             autocomplete="username" spellcheck="false" oninput="validateUsernameInput(this)"
                             onblur="validateUsernameBlur(this)">
                     </div>
@@ -189,14 +194,9 @@
                     <div class="input-group">
                         <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-lock"></i></span>
                         <input type="password" name="password" id="password"
-                            class="form-control bg-light border-start-0 border-end-0"
-                            placeholder="Enter password (min. 6 characters)" required autocomplete="current-password"
+                            class="form-control bg-light border-start-0"
+                            placeholder="Enter password" required autocomplete="current-password"
                             oninput="validatePasswordInput(this)" onblur="validatePasswordBlur(this)">
-                        <button type="button" class="input-group-text bg-light border-start-0 text-secondary"
-                            id="togglePasswordBtn" onclick="togglePasswordVisibility()" style="cursor: pointer;"
-                            title="Show/Hide Password">
-                            <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
-                        </button>
                     </div>
                     <div id="passwordHint" class="invalid-feedback mt-1" style="display:none; font-size:0.8rem;">
                         <i class="fa-solid fa-circle-exclamation me-1"></i><span id="passwordHintText">Password.</span>

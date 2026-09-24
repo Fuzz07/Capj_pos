@@ -545,7 +545,7 @@
                         <span class="topbar-user-label">Logged in as</span>
                         <span class="topbar-user-name">{{ auth()->user()->full_name ?? auth()->user()->username }}</span>
                     </div>
-                    <a href="/logout" class="btn-logout-top">
+                    <a href="{{ route('logout') }}" class="btn-logout-top" onclick="return confirmLogout(event)">
                         <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
                     </a>
                 </header>
@@ -592,6 +592,32 @@
                     });
                 }
             });
+
+            function confirmLogout(e) {
+                if (e) e.preventDefault();
+                Swal.fire({
+                    title: 'Sign Out?',
+                    text: 'Are you sure you want to log out of your session?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: '<i class="fa-solid fa-right-from-bracket me-1"></i> Yes, Log Out',
+                    cancelButtonText: 'Cancel',
+                    reverseButtons: true,
+                    customClass: {
+                        popup: 'rounded-4 shadow',
+                        confirmButton: 'btn btn-danger px-4 fw-semibold',
+                        cancelButton: 'btn btn-light border px-4 fw-semibold me-2'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{{ route('logout') }}";
+                    }
+                });
+                return false;
+            }
 
             // Intercept any delete confirmation forms
             document.addEventListener('submit', function (e) {

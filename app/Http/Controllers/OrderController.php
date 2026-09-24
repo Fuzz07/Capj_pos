@@ -7,33 +7,117 @@ use App\Models\Order;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 
 class OrderController extends Controller
 {
-    public function index()
+    private function ensureSoftDeletesColumn()
     {
-        $orders = Order::with('user', 'items.inventory')->latest()->paginate(15);
-        return view('orders.index', compact('orders'));
+        try {
+            if (!Schema::hasColumn('orders', 'deleted_at')) {
+                Schema::table('orders', function (Blueprint $table) {
+                    $table->softDeletes();
+                });
+            }
+        } catch (\Throwable $th) {
+            // Ignore if column exists or schema alter fails
+        }
     }
 
-    public function show(Order $order)
+    public function index(Request $request)
     {
-        $order->load('user', 'items.inventory');
+        $this->ensureSoftDeletesColumn();
+        $tab = $request->query('tab', 'active');
+
+        if ($tab === 'archived') {
+            $orders = Order::onlyTrashed()->with('user', 'items.inventory')->latest()->paginate(15);
+        } else {
+            $orders = Order::with('user', 'items.inventory')->latest()->paginate(15);
+        }
+
+        $activeCount = Order::count();
+        $archivedCount = Order::onlyTrashed()->count();
+
+        return view('orders.index', compact('orders', 'tab', 'activeCount', 'archivedCount'));
+    }
+
+    public function show($id)
+    {
+        $this->ensureSoftDeletesColumn();
+        $order = Order::withTrashed()->with('user', 'items.inventory')->findOrFail($id);
         return view('orders.show', compact('order'));
     }
 
+    /**
+     * Archive an order (Soft Delete).
+     */
     public function destroy(Order $order)
     {
         if (auth()->user()->role !== 'admin') {
-            return redirect()->route('orders.index')->with('error', 'Access denied. Only administrators can delete orders.');
+            return redirect()->route('orders.index')->with('error', 'Access denied. Only administrators can archive orders.');
         }
-        $order->items()->delete();
+
+        $this->ensureSoftDeletesColumn();
+        $orderId = $order->id;
         $order->delete();
-        return redirect()->route('orders.index')->with('success', 'Order deleted successfully.');
+
+        ActivityLog::create([
+            'user_id'     => auth()->id(),
+            'action'      => 'ORDER_ARCHIVED',
+            'description' => "Archived order #{$orderId}.",
+        ]);
+
+        return redirect()->route('orders.index')->with('success', "Order #{$orderId} has been archived.");
     }
 
     /**
-     * Void a completed order (admin only).
+     * Restore an archived order (Unarchive).
+     */
+    public function restore($id)
+    {
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('orders.index')->with('error', 'Access denied. Only administrators can unarchive orders.');
+        }
+
+        $this->ensureSoftDeletesColumn();
+        $order = Order::onlyTrashed()->findOrFail($id);
+        $order->restore();
+
+        ActivityLog::create([
+            'user_id'     => auth()->id(),
+            'action'      => 'ORDER_UNARCHIVED',
+            'description' => "Unarchived order #{$id}.",
+        ]);
+
+        return redirect()->route('orders.index', ['tab' => 'archived'])->with('success', "Order #{$id} has been restored from archive.");
+    }
+
+    /**
+     * Permanently delete an order from archive.
+     */
+    public function forceDelete($id)
+    {
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('orders.index')->with('error', 'Access denied. Only administrators can permanently delete orders.');
+        }
+
+        $this->ensureSoftDeletesColumn();
+        $order = Order::onlyTrashed()->findOrFail($id);
+        $order->items()->delete();
+        $order->forceDelete();
+
+        ActivityLog::create([
+            'user_id'     => auth()->id(),
+            'action'      => 'ORDER_PERMANENTLY_DELETED',
+            'description' => "Permanently deleted order #{$id} from archive.",
+        ]);
+
+        return redirect()->route('orders.index', ['tab' => 'archived'])->with('success', "Order #{$id} has been permanently deleted.");
+    }
+
+    /**
+     * Void a completed order (accessible by Admin and Staff).
      * Restores inventory stock and marks the order as 'voided' (or 'cancelled' if restricted).
      */
     public function void(Order $order)

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Orders - Captain J POS')
+@section('title', ($tab === 'archived' ? 'Archived Orders' : 'Orders') . ' - Captain J POS')
 
 @push('styles')
 <style>
@@ -15,18 +15,54 @@
         font-size: 0.8rem;
         padding: 0.35em 0.7em;
     }
+    .nav-tabs .nav-link {
+        color: #64748b;
+        font-weight: 600;
+        border: none;
+        border-bottom: 3px solid transparent;
+        padding: 0.75rem 1.25rem;
+    }
+    .nav-tabs .nav-link.active {
+        color: #dc2626;
+        border-bottom-color: #dc2626;
+        background: transparent;
+    }
+    .nav-tabs .nav-link:hover:not(.active) {
+        border-bottom-color: #cbd5e1;
+    }
 </style>
 @endpush
 
 @section('content')
 <div class="container-fluid px-4">
     <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
-            <h3 class="fw-bold m-0 text-dark"><i class="fa-solid fa-receipt text-primary me-2"></i> Recent Orders</h3>
+            <h3 class="fw-bold m-0 text-dark">
+                <i class="fa-solid fa-receipt text-primary me-2"></i> 
+                {{ $tab === 'archived' ? 'Archived Orders' : 'Recent Orders' }}
+            </h3>
             <p class="text-secondary small m-0">View transactions, payment details, receipts, and order statuses.</p>
         </div>
     </div>
+
+    <!-- Tabs Navigation (Active vs Archived) -->
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a href="{{ route('orders.index', ['tab' => 'active']) }}" class="nav-link {{ $tab !== 'archived' ? 'active' : '' }}">
+                <i class="fa-solid fa-list-check me-2"></i> Active Orders
+                <span class="badge rounded-pill bg-danger-subtle text-danger ms-2">{{ $activeCount ?? $orders->total() }}</span>
+            </a>
+        </li>
+        @if(auth()->user()->isAdmin())
+        <li class="nav-item">
+            <a href="{{ route('orders.index', ['tab' => 'archived']) }}" class="nav-link {{ $tab === 'archived' ? 'active' : '' }}">
+                <i class="fa-solid fa-box-archive me-2"></i> Archived Orders
+                <span class="badge rounded-pill bg-secondary ms-2">{{ $archivedCount ?? 0 }}</span>
+            </a>
+        </li>
+        @endif
+    </ul>
 
     <!-- Filters & Search Card -->
     <div class="card card-custom p-3 mb-4">
@@ -38,7 +74,7 @@
                 </div>
             </div>
             <div class="col-12 col-md-6 text-md-end text-muted small">
-                Showing <strong>{{ $orders->count() }}</strong> of <strong>{{ $orders->total() }}</strong> orders
+                Showing <strong>{{ $orders->count() }}</strong> of <strong>{{ $orders->total() }}</strong> {{ $tab === 'archived' ? 'archived' : '' }} orders
             </div>
         </div>
     </div>
@@ -88,24 +124,49 @@
                                 <i class="fa-solid fa-eye me-1"></i> View
                             </a>
 
-                            @if(auth()->user()->isAdmin() && $o->status === 'completed')
-                            <button type="button"
-                                class="btn btn-sm btn-light text-warning border me-1"
-                                title="Void Order"
-                                onclick="confirmVoid({{ $o->id }}, '{{ route('orders.void', $o->id) }}')"
-                            >
-                                <i class="fa-solid fa-rotate-left me-1"></i> Void
-                            </button>
-                            @endif
-
-                            @if(auth()->user()->isAdmin())
-                            <form action="{{ route('orders.destroy', $o->id) }}" method="POST" class="d-inline confirm-delete" data-confirm-message="Are you sure you want to delete Order #{{ $o->id }}?">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-light text-danger border" title="Delete Order">
-                                    <i class="fa-solid fa-trash"></i>
+                            @if($tab !== 'archived')
+                                <!-- Void Button: Available for BOTH Admin & Staff -->
+                                @if($o->status === 'completed')
+                                <button type="button"
+                                    class="btn btn-sm btn-light text-warning border me-1"
+                                    title="Void Order"
+                                    onclick="confirmVoid({{ $o->id }}, '{{ route('orders.void', $o->id) }}')"
+                                >
+                                    <i class="fa-solid fa-rotate-left me-1"></i> Void
                                 </button>
-                            </form>
+                                @endif
+
+                                <!-- Archive Button (Replaces Delete button): Admin Only -->
+                                @if(auth()->user()->isAdmin())
+                                <button type="button"
+                                    class="btn btn-sm btn-light text-secondary border me-1"
+                                    title="Archive Order"
+                                    onclick="confirmArchive({{ $o->id }}, '{{ route('orders.destroy', $o->id) }}')"
+                                >
+                                    <i class="fa-solid fa-box-archive me-1"></i> Archive
+                                </button>
+                                @endif
+                            @else
+                                <!-- Archived Orders Tab Actions: Admin Only -->
+                                @if(auth()->user()->isAdmin())
+                                <!-- Unarchive Button -->
+                                <button type="button"
+                                    class="btn btn-sm btn-light text-success border me-1"
+                                    title="Unarchive Order"
+                                    onclick="confirmUnarchive({{ $o->id }}, '{{ route('orders.restore', $o->id) }}')"
+                                >
+                                    <i class="fa-solid fa-box-open me-1"></i> Unarchive
+                                </button>
+
+                                <!-- Permanent Delete Button -->
+                                <button type="button"
+                                    class="btn btn-sm btn-light text-danger border"
+                                    title="Permanently Delete Order"
+                                    onclick="confirmForceDelete({{ $o->id }}, '{{ route('orders.force-delete', $o->id) }}')"
+                                >
+                                    <i class="fa-solid fa-trash me-1"></i> Delete
+                                </button>
+                                @endif
                             @endif
                         </td>
                     </tr>
@@ -113,7 +174,7 @@
                     <tr>
                         <td colspan="8" class="text-center py-5 text-muted">
                             <i class="fa-regular fa-folder-open fs-2 mb-2 opacity-50"></i>
-                            <p class="m-0">No orders found.</p>
+                            <p class="m-0">No {{ $tab === 'archived' ? 'archived' : '' }} orders found.</p>
                         </td>
                     </tr>
                     @endforelse
@@ -122,7 +183,7 @@
         </div>
 
         <div class="d-flex justify-content-center mt-4">
-            {{ $orders->links('pagination::bootstrap-5') }}
+            {{ $orders->appends(['tab' => $tab])->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div>
@@ -139,28 +200,101 @@
         });
     });
 
+    function postForm(actionUrl, method = 'POST') {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = actionUrl;
+        
+        const csrf = document.createElement('input');
+        csrf.type = 'hidden';
+        csrf.name = '_token';
+        csrf.value = '{{ csrf_token() }}';
+        form.appendChild(csrf);
+
+        if (method !== 'POST') {
+            const mInput = document.createElement('input');
+            mInput.type = 'hidden';
+            mInput.name = '_method';
+            mInput.value = method;
+            form.appendChild(mInput);
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    // Validation 1: Void Order
     function confirmVoid(orderId, voidUrl) {
         Swal.fire({
             title: 'Void Order #' + orderId + '?',
-            html: 'This will <strong>restore the stock</strong> of all items in this order and mark it as <strong>Voided</strong>.<br><br>This action cannot be undone.',
+            html: 'This will <strong>restore the inventory stock</strong> of all items in this order and mark it as <strong>Voided</strong>.<br><br>Do you want to proceed?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#e67e22',
+            confirmButtonColor: '#f59e0b',
             cancelButtonColor: '#6c757d',
             confirmButtonText: '<i class="fa-solid fa-rotate-left me-1"></i> Yes, Void It',
             cancelButtonText: 'Cancel',
+            reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = voidUrl;
-                const csrf = document.createElement('input');
-                csrf.type = 'hidden';
-                csrf.name = '_token';
-                csrf.value = '{{ csrf_token() }}';
-                form.appendChild(csrf);
-                document.body.appendChild(form);
-                form.submit();
+                postForm(voidUrl, 'POST');
+            }
+        });
+    }
+
+    // Validation 2: Archive Order
+    function confirmArchive(orderId, archiveUrl) {
+        Swal.fire({
+            title: 'Archive Order #' + orderId + '?',
+            text: 'This order will be moved to the Archived Orders list.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#64748b',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="fa-solid fa-box-archive me-1"></i> Yes, Archive',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                postForm(archiveUrl, 'DELETE');
+            }
+        });
+    }
+
+    // Validation 3: Unarchive Order
+    function confirmUnarchive(orderId, restoreUrl) {
+        Swal.fire({
+            title: 'Unarchive Order #' + orderId + '?',
+            text: 'This order will be restored back to the Active Orders list.',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="fa-solid fa-box-open me-1"></i> Yes, Unarchive',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                postForm(restoreUrl, 'POST');
+            }
+        });
+    }
+
+    // Validation 4: Permanent Delete Order
+    function confirmForceDelete(orderId, deleteUrl) {
+        Swal.fire({
+            title: 'Permanently Delete Order #' + orderId + '?',
+            html: '<strong class="text-danger">Warning:</strong> This action is permanent and cannot be undone!',
+            icon: 'error',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="fa-solid fa-trash me-1"></i> Yes, Delete Permanently',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                postForm(deleteUrl, 'DELETE');
             }
         });
     }
