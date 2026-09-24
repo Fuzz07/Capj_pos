@@ -156,6 +156,133 @@ class ReportController extends Controller
         ));
     }
 
+    /**
+     * Export sales report and order transactions as CSV
+     */
+    public function exportCsv(Request $request)
+    {
+        $period = in_array($request->input('period'), ['daily', 'weekly', 'monthly'], true)
+            ? $request->input('period')
+            : 'daily';
+
+        $filter_date_from = $request->input('date_from', '');
+        $filter_date_to = $request->input('date_to', '');
+
+        if ($filter_date_from && $filter_date_to) {
+            $rangeStart = Carbon::parse($filter_date_from)->startOfDay();
+            $rangeEnd = Carbon::parse($filter_date_to)->endOfDay();
+            if ($rangeEnd->lt($rangeStart)) {
+                [$rangeStart, $rangeEnd] = [$rangeEnd->startOfDay(), $rangeStart->endOfDay()];
+            }
+        } else {
+            $rangeEnd = today()->endOfDay();
+            $rangeStart = match ($period) {
+                'weekly' => today()->subWeeks(11)->startOfWeek()->startOfDay(),
+                'monthly' => today()->subMonths(11)->startOfMonth()->startOfDay(),
+                default => today()->subDays(29)->startOfDay(),
+            };
+        }
+
+        $orders = Order::with('user', 'items.inventory')
+            ->where('status', 'completed')
+            ->whereBetween('created_at', [$rangeStart, $rangeEnd])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $totalRevenue = (float) $orders->sum('total_amount');
+        $totalOrders = $orders->count();
+        $totalItems = 0;
+        $cashRevenue = 0.0;
+        $gcashRevenue = 0.0;
+
+        foreach ($orders as $o) {
+            $totalItems += (int) $o->items->sum('qty');
+            if (strtolower($o->payment_method) === 'gcash') {
+                $gcashRevenue += (float) $o->total_amount;
+            } else {
+                $cashRevenue += (float) $o->total_amount;
+            }
+        }
+
+        $avgOrder = $totalOrders > 0 ? round($totalRevenue / $totalOrders, 2) : 0.0;
+        $filename = 'sales_report_' . $period . '_' . $rangeStart->format('Ymd') . '_' . $rangeEnd->format('Ymd') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+
+        $callback = function () use ($orders, $period, $rangeStart, $rangeEnd, $totalRevenue, $totalOrders, $totalItems, $cashRevenue, $gcashRevenue, $avgOrder) {
+            $handle = fopen('php://output', 'w');
+            
+            // UTF-8 BOM for Excel compatibility
+            fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
+
+            // Title and metadata
+            fputcsv($handle, ['CAPTAiN J POS - SALES REPORT']);
+            fputcsv($handle, ['Reporting Period', ucfirst($period) . ' (' . $rangeStart->format('M j, Y') . ' to ' . $rangeEnd->format('M j, Y') . ')']);
+            fputcsv($handle, ['Exported At', now()->format('Y-m-d H:i:s')]);
+            fputcsv($handle, []);
+
+            // Summary KPIs
+            fputcsv($handle, ['--- SUMMARY METRICS ---']);
+            fputcsv($handle, ['Total Revenue (PHP)', 'Total Orders', 'Total Items Sold', 'Cash Revenue (PHP)', 'GCash Revenue (PHP)', 'Average Order Value (PHP)']);
+            fputcsv($handle, [
+                number_format($totalRevenue, 2, '.', ''),
+                $totalOrders,
+                $totalItems,
+                number_format($cashRevenue, 2, '.', ''),
+                number_format($gcashRevenue, 2, '.', ''),
+                number_format($avgOrder, 2, '.', ''),
+            ]);
+            fputcsv($handle, []);
+
+            // Detailed Transactions
+            fputcsv($handle, ['--- ORDER TRANSACTIONS ---']);
+            fputcsv($handle, [
+                'Order ID',
+                'Date',
+                'Time',
+                'Customer',
+                'Cashier',
+                'Payment Method',
+                'Items Summary',
+                'Items Count',
+                'Takeout Fee (PHP)',
+                'Total Amount (PHP)',
+                'Status'
+            ]);
+
+            foreach ($orders as $order) {
+                $itemSummary = $order->items->map(function ($it) {
+                    $name = $it->inventory->name ?? 'Item';
+                    return $it->qty . 'x ' . $name;
+                })->implode('; ');
+
+                fputcsv($handle, [
+                    '#' . $order->id,
+                    $order->created_at->format('Y-m-d'),
+                    $order->created_at->format('h:i A'),
+                    $order->customer_name ?: 'Walk-in',
+                    $order->user->full_name ?? ($order->user->username ?? 'N/A'),
+                    strtoupper($order->payment_method),
+                    $itemSummary,
+                    $order->items->sum('qty'),
+                    number_format((float) ($order->takeout_fee ?? 0), 2, '.', ''),
+                    number_format((float) $order->total_amount, 2, '.', ''),
+                    ucfirst($order->status),
+                ]);
+            }
+
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
     private function completedOrdersBetween(Carbon $start, Carbon $end)
     {
         return Order::where('status', 'completed')

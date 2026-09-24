@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Notifications - Captain J POS')
+@section('title', 'Notifications - CAPTAiN J POS')
 
 @section('content')
 <div class="container-fluid px-4">

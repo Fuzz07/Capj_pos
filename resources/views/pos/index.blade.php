@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'POS Terminal - Captain J POS')
+@section('title', 'POS Terminal - CAPTAiN J POS')
 
 @push('styles')
 <style>

@@ -171,10 +171,16 @@
             <h3 class="fw-bold m-0 text-dark"><i class="fa-solid fa-chart-line text-primary me-2"></i> Sales &amp; Reports</h3>
             <p class="text-secondary small m-0">Owner view &mdash; revenue, items sold, best sellers and full sales history.</p>
         </div>
-        <span class="badge bg-dark-subtle text-dark fw-semibold px-3 py-2 rounded-pill">
-            <i class="fa-regular fa-calendar me-1"></i>
-            {{ $rangeStart->format('M j, Y') }} &ndash; {{ $rangeEnd->format('M j, Y') }}
-        </span>
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <a href="{{ route('reports.export-csv', array_filter(['period' => $period, 'date_from' => $filter_date_from, 'date_to' => $filter_date_to])) }}"
+               class="btn btn-success btn-sm fw-semibold px-3 py-2 shadow-sm rounded-pill d-inline-flex align-items-center gap-2">
+                <i class="fa-solid fa-file-csv fs-6"></i> Download CSV
+            </a>
+            <span class="badge bg-dark-subtle text-dark fw-semibold px-3 py-2 rounded-pill">
+                <i class="fa-regular fa-calendar me-1"></i>
+                {{ $rangeStart->format('M j, Y') }} &ndash; {{ $rangeEnd->format('M j, Y') }}
+            </span>
+        </div>
     </div>
 
     <!-- Period Tabs & Date Filter -->
@@ -414,9 +420,15 @@
                 <h5 class="fw-bold m-0 text-dark"><i class="fa-solid fa-clock-rotate-left text-secondary me-2"></i> Sales History</h5>
                 <p class="text-secondary small m-0">Every completed transaction in the selected range.</p>
             </div>
-            <span class="text-muted small">
-                Showing {{ $history->count() }} of {{ number_format($history->total()) }} transactions
-            </span>
+            <div class="d-flex align-items-center gap-2">
+                <span class="text-muted small">
+                    Showing {{ $history->count() }} of {{ number_format($history->total()) }} transactions
+                </span>
+                <a href="{{ route('reports.export-csv', array_filter(['period' => $period, 'date_from' => $filter_date_from, 'date_to' => $filter_date_to])) }}"
+                   class="btn btn-outline-success btn-sm fw-semibold px-2 py-1" title="Export this table to CSV">
+                    <i class="fa-solid fa-download me-1"></i> CSV
+                </a>
+            </div>
         </div>
 
         <div class="table-responsive">

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Account Settings - Captain J POS')
+@section('title', 'Account Settings - CAPTAiN J POS')
 
 @section('content')
 <div class="container-fluid px-4 py-2" style="max-width: 1100px;">

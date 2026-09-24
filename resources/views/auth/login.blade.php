@@ -194,9 +194,14 @@
                     <div class="input-group">
                         <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-lock"></i></span>
                         <input type="password" name="password" id="password"
-                            class="form-control bg-light border-start-0"
+                            class="form-control bg-light border-start-0 border-end-0"
                             placeholder="Enter password" required autocomplete="current-password"
                             oninput="validatePasswordInput(this)" onblur="validatePasswordBlur(this)">
+                        <button class="btn btn-light bg-light border border-start-0 text-muted" type="button"
+                            id="togglePasswordBtn" onclick="togglePasswordVisibility()" tabindex="-1"
+                            title="Show/Hide Password" style="border-color: #dee2e6;">
+                            <i class="fa-solid fa-eye" id="passwordToggleIcon"></i>
+                        </button>
                     </div>
                     <div id="passwordHint" class="invalid-feedback mt-1" style="display:none; font-size:0.8rem;">
                         <i class="fa-solid fa-circle-exclamation me-1"></i><span id="passwordHintText">Password.</span>
@@ -320,6 +325,19 @@
                 hintText.innerText = `Password must be at least 6 characters long (${input.value.length}/6 entered).`;
                 hint.style.display = 'block';
                 input.classList.add('is-invalid');
+            }
+        function togglePasswordVisibility() {
+            const pwd = document.getElementById('password');
+            const icon = document.getElementById('passwordToggleIcon');
+            if (!pwd || !icon) return;
+            if (pwd.type === 'password') {
+                pwd.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                pwd.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
             }
         }
 

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', ($tab === 'archived' ? 'Archived Orders' : 'Orders') . ' - Captain J POS')
+@section('title', ($tab === 'archived' ? 'Archived Orders' : 'Orders') . ' - CAPTAiN J POS')
 
 @push('styles')
 <style>

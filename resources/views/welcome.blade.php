@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAPTAIN J POS SYSTEM - Point of Sale & Management</title>
+    <title>CAPTAiN J POS SYSTEM - Point of Sale & Management</title>
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
     <link rel="apple-touch-icon" href="{{ asset('images/capj.jpg') }}">
 
@@ -79,10 +79,10 @@
             <!-- Brand Logo -->
             <a href="{{ route('landing') }}" class="flex items-center gap-3 group">
                 <div class="w-11 h-11 rounded-full overflow-hidden border-2 border-red-500 p-0.5 shadow-sm group-hover:scale-105 transition-transform duration-200">
-                    <img src="{{ asset('images/capj.jpg') }}" alt="Captain J Logo" class="w-full h-full object-cover rounded-full">
+                    <img src="{{ asset('images/capj.jpg') }}" alt="CAPTAiN J Logo" class="w-full h-full object-cover rounded-full">
                 </div>
                 <div>
-                    <span class="text-xl font-extrabold tracking-tight text-slate-900 block leading-none">CAPTAIN J</span>
+                    <span class="text-xl font-extrabold tracking-tight text-slate-900 block leading-none">CAPTAiN J</span>
                     <span class="text-xs font-semibold text-red-600 tracking-wider">POS SYSTEM</span>
                 </div>
             </a>
@@ -122,7 +122,7 @@
                 <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
                     <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-50 border border-red-100 text-red-600 font-bold text-xs uppercase tracking-wider">
                         <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
-                        CAPTAIN J POS SYSTEM
+                        CAPTAiN J POS SYSTEM
                     </div>
 
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-none sm:leading-tight">
@@ -132,25 +132,6 @@
                     <p class="text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
                         Manage sales, products, inventory, transactions, and daily business operations in one place.
                     </p>
-
-                    <div class="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-4">
-                        @auth
-                            <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-3 px-7 py-3.5 text-base font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg shadow-lg shadow-red-200 transition-all transform hover:-translate-y-0.5">
-                                Log in to POS
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </a>
-                        @else
-                            <a href="{{ route('login') }}" class="inline-flex items-center gap-3 px-7 py-3.5 text-base font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg shadow-lg shadow-red-200 transition-all transform hover:-translate-y-0.5">
-                                Log in to POS
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </a>
-                        @endauth
-
-                        <a href="https://median.co/share/krkwrwz#apk" target="_blank" class="inline-flex items-center gap-3 px-7 py-3.5 text-base font-bold text-slate-700 bg-white hover:bg-slate-50 border-2 border-slate-200 rounded-lg transition-all shadow-sm">
-                            <i class="fa-solid fa-download text-red-600"></i>
-                            Download Android App
-                        </a>
-                    </div>
                 </div>
 
                 <!-- Right Device Mockup -->
@@ -158,7 +139,7 @@
                     <div class="relative mx-auto max-w-lg lg:max-w-none">
                         <!-- Glass background highlight -->
                         <div class="absolute -inset-4 bg-gradient-to-r from-red-500/10 to-orange-500/10 rounded-3xl blur-2xl -z-10"></div>
-                        <img src="{{ asset('images/pos_hero_mockup.jpg') }}" alt="CAPTAIN J POS Dashboard & Mobile Interface" class="w-full h-auto rounded-2xl shadow-2xl border border-slate-200/80">
+                        <img src="{{ asset('images/pos_hero_mockup.jpg') }}" alt="CAPTAiN J POS Dashboard & Mobile Interface" class="w-full h-auto rounded-2xl shadow-2xl border border-slate-200/80">
                     </div>
                 </div>
 
@@ -236,17 +217,17 @@
                 <!-- Mobile Phone Mockup -->
                 <div class="lg:col-span-4 flex justify-center">
                     <div class="relative max-w-[280px]">
-                        <img src="{{ asset('images/pos_mobile_preview.jpg') }}" alt="CAPTAIN J Mobile POS App" class="w-full h-auto rounded-3xl shadow-xl border-4 border-slate-800">
+                        <img src="{{ asset('images/pos_mobile_preview.jpg') }}" alt="CAPTAiN J Mobile POS App" class="w-full h-auto rounded-3xl shadow-xl border-4 border-slate-800">
                     </div>
                 </div>
 
                 <!-- App Details & QR Action -->
                 <div class="lg:col-span-5 space-y-6 text-center lg:text-left">
                     <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
-                        CAPTAIN J POS on Android
+                        CAPTAiN J POS on Android
                     </h2>
                     <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-                        Take your POS system with you. Download the official CAPTAIN J Android application and access your business tools from your mobile device.
+                        Take your POS system with you. Download the official CAPTAiN J Android application and access your business tools from your mobile device.
                     </p>
 
                     <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
@@ -277,7 +258,7 @@
                         </li>
                         <li class="flex items-start gap-2.5">
                             <i class="fa-solid fa-check text-red-600 mt-1"></i>
-                            <span>Download the latest CAPTAIN J APK</span>
+                            <span>Download the latest CAPTAiN J APK</span>
                         </li>
                         <li class="flex items-start gap-2.5">
                             <i class="fa-solid fa-check text-red-600 mt-1"></i>
@@ -295,7 +276,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
-                    How to use CAPTAIN J
+                    How to use CAPTAiN J
                 </h2>
                 <p class="text-slate-600">
                     Get started in just a few simple steps.
@@ -311,7 +292,7 @@
                     </div>
                     <h3 class="text-lg font-bold text-slate-900">Sign in</h3>
                     <p class="text-slate-600 text-sm leading-relaxed">
-                        Log in using your CAPTAIN J account.
+                        Log in using your CAPTAiN J account.
                     </p>
                 </div>
 
@@ -341,184 +322,109 @@
         </div>
     </section>
 
-    <!-- FAQ & SUPPORT SECTION -->
+    <!-- FAQ SECTION -->
     <section id="faq" class="py-20 bg-slate-50 border-t border-slate-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                
-                <!-- Left FAQ Column -->
-                <div class="lg:col-span-7 space-y-6">
-                    <div>
-                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
-                            Frequently Asked Questions
-                        </h2>
-                        <p class="text-slate-600 text-sm mt-1">
-                            Find answers to common questions about CAPTAIN J POS.
-                        </p>
-                    </div>
-
-                    <div class="space-y-3">
-                        <!-- FAQ 1 -->
-                        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-                            <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex justify-between items-center hover:text-red-600 transition-colors">
-                                <span>How do I access CAPTAIN J POS?</span>
-                                <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
-                            </button>
-                            <div class="px-6 pb-4 text-sm text-slate-600 hidden">
-                                You can access CAPTAIN J POS directly from any web browser by clicking the 'Log in to POS' button or by downloading the official Android application.
-                            </div>
-                        </div>
-
-                        <!-- FAQ 2 -->
-                        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-                            <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex justify-between items-center hover:text-red-600 transition-colors">
-                                <span>How do I download the Android app?</span>
-                                <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
-                            </button>
-                            <div class="px-6 pb-4 text-sm text-slate-600 hidden">
-                                Click the 'Download APK' button on this landing page or scan the provided QR code with your smartphone camera to launch the direct download.
-                            </div>
-                        </div>
-
-                        <!-- FAQ 3 -->
-                        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-                            <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex justify-between items-center hover:text-red-600 transition-colors">
-                                <span>How do I install the APK?</span>
-                                <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
-                            </button>
-                            <div class="px-6 pb-4 text-sm text-slate-600 hidden">
-                                Open the downloaded file on your Android device. If prompted, allow installation from unknown sources in your browser settings to complete setup.
-                            </div>
-                        </div>
-
-                        <!-- FAQ 4 -->
-                        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-                            <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex justify-between items-center hover:text-red-600 transition-colors">
-                                <span>Can I use CAPTAIN J on a computer?</span>
-                                <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
-                            </button>
-                            <div class="px-6 pb-4 text-sm text-slate-600 hidden">
-                                Yes! CAPTAIN J POS works on desktops, laptops, tablets, and mobile devices through any modern browser.
-                            </div>
-                        </div>
-
-                        <!-- FAQ 5 -->
-                        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-                            <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex justify-between items-center hover:text-red-600 transition-colors">
-                                <span>What should I do if I forget my password?</span>
-                                <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
-                            </button>
-                            <div class="px-6 pb-4 text-sm text-slate-600 hidden">
-                                Click 'Forgot Password' on the login screen and enter your registered email address to receive password reset instructions.
-                            </div>
-                        </div>
-
-                        <!-- FAQ 6 -->
-                        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-                            <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex justify-between items-center hover:text-red-600 transition-colors">
-                                <span>Is my business information secure?</span>
-                                <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
-                            </button>
-                            <div class="px-6 pb-4 text-sm text-slate-600 hidden">
-                                Yes, CAPTAIN J POS ensures your data is protected through encrypted sessions, single-tab security checks, and strict access controls.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right Support Card Column -->
-                <div class="lg:col-span-5">
-                    <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm space-y-6">
-                        <div>
-                            <h3 class="text-xl font-bold text-slate-900">CAPTAIN J Support</h3>
-                            <p class="text-slate-600 text-xs mt-1">
-                                Need help with setup, installation, or POS system? Contact CAPTAIN J support team for assistance.
-                            </p>
-                        </div>
-
-                        <div class="space-y-4 pt-2">
-                            <div class="flex items-start gap-4">
-                                <div class="w-10 h-10 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shrink-0">
-                                    <i class="fa-solid fa-headset"></i>
-                                </div>
-                                <div>
-                                    <span class="block text-xs uppercase font-extrabold text-slate-400 tracking-wider">QUICK SUPPORT</span>
-                                    <span class="text-sm font-semibold text-slate-800">Join support channel</span>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-4">
-                                <div class="w-10 h-10 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shrink-0">
-                                    <i class="fa-solid fa-phone"></i>
-                                </div>
-                                <div>
-                                    <span class="block text-xs uppercase font-extrabold text-slate-400 tracking-wider">SYSTEM ADMINISTRATOR</span>
-                                    <span class="text-sm font-semibold text-slate-800">Contact your administrator</span>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-4">
-                                <div class="w-10 h-10 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shrink-0">
-                                    <i class="fa-solid fa-clock"></i>
-                                </div>
-                                <div>
-                                    <span class="block text-xs uppercase font-extrabold text-slate-400 tracking-wider">SUPPORT HOURS</span>
-                                    <span class="text-sm font-semibold text-slate-800">24/7 Support Available</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+                    Frequently Asked Questions
+                </h2>
+                <p class="text-slate-600 text-sm">
+                    Find answers to common questions about CAPTAiN J POS.
+                </p>
             </div>
+
+            <div class="space-y-3">
+                <!-- FAQ 1 -->
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                    <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex justify-between items-center hover:text-red-600 transition-colors">
+                        <span>How do I access CAPTAiN J POS?</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
+                    </button>
+                    <div class="px-6 pb-4 text-sm text-slate-600 hidden">
+                        You can access CAPTAiN J POS directly from any web browser by clicking the 'Log in to POS' button or by downloading the official Android application.
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                    <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex justify-between items-center hover:text-red-600 transition-colors">
+                        <span>How do I download the Android app?</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
+                    </button>
+                    <div class="px-6 pb-4 text-sm text-slate-600 hidden">
+                        Click the 'Download APK' button on this landing page or scan the provided QR code with your smartphone camera to launch the direct download.
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                    <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex justify-between items-center hover:text-red-600 transition-colors">
+                        <span>How do I install the APK?</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
+                    </button>
+                    <div class="px-6 pb-4 text-sm text-slate-600 hidden">
+                        Open the downloaded file on your Android device. If prompted, allow installation from unknown sources in your browser settings to complete setup.
+                    </div>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                    <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex justify-between items-center hover:text-red-600 transition-colors">
+                        <span>Can I use CAPTAiN J on a computer?</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
+                    </button>
+                    <div class="px-6 pb-4 text-sm text-slate-600 hidden">
+                        Yes! CAPTAiN J POS works on desktops, laptops, tablets, and mobile devices through any modern browser.
+                    </div>
+                </div>
+
+                <!-- FAQ 5 -->
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                    <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex justify-between items-center hover:text-red-600 transition-colors">
+                        <span>What should I do if I forget my password?</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
+                    </button>
+                    <div class="px-6 pb-4 text-sm text-slate-600 hidden">
+                        Click 'Forgot Password' on the login screen and enter your registered email address to receive password reset instructions.
+                    </div>
+                </div>
+
+                <!-- FAQ 6 -->
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                    <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex justify-between items-center hover:text-red-600 transition-colors">
+                        <span>Is my business information secure?</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
+                    </button>
+                    <div class="px-6 pb-4 text-sm text-slate-600 hidden">
+                        Yes, CAPTAiN J POS ensures your data is protected through encrypted sessions, single-tab security checks, and strict access controls.
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
     <!-- FOOTER -->
     <footer class="bg-white border-t border-slate-100 py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
-            <p>© {{ date('Y') }} CAPTAIN J POS SYSTEM. All rights reserved.</p>
-            <div class="flex items-center gap-6">
-                <a href="#hero" class="hover:text-red-600 transition-colors">Home</a>
-                <a href="#download" class="hover:text-red-600 transition-colors">Website</a>
-                <a href="#features" class="hover:text-red-600 transition-colors">For Your Business</a>
-            </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500 font-medium">
+            <p>© 2026 CAPTAiN J POS SYSTEM. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- QR CODE DOWNLOAD MODAL (Matching Image 2) -->
+    <!-- QR CODE DOWNLOAD MODAL -->
     <div id="qrModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden transition-opacity duration-300">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-8 shadow-2xl relative text-center space-y-6 transform transition-transform scale-95 duration-300" id="modalCard">
+        <div class="bg-white rounded-3xl max-w-xs w-full p-6 shadow-2xl relative text-center transform transition-transform scale-95 duration-300" id="modalCard">
             
             <!-- Close Button -->
-            <button onclick="closeQrModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
+            <button onclick="closeQrModal()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
 
-            <!-- App Logo Icon -->
-            <div class="w-16 h-16 mx-auto rounded-2xl bg-red-600 p-1 shadow-md overflow-hidden flex items-center justify-center">
-                <img src="{{ asset('images/capj.jpg') }}" alt="Captain J POS Logo" class="w-full h-full object-cover rounded-xl">
-            </div>
-
-            <!-- Header Titles -->
-            <div class="space-y-2">
-                <h3 class="text-2xl font-black text-slate-900 tracking-tight">CAPTAIN J POS</h3>
-                <p class="text-slate-600 text-sm leading-relaxed px-2 font-medium">
-                    Scan the QR code to launch this page on your Android device, and then download and install the APK.
-                </p>
-            </div>
-
-            <!-- QR Code Graphic -->
-            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 inline-block shadow-inner">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=https://median.co/share/krkwrwz%23apk" alt="Captain J POS APK QR Code" class="w-52 h-52 mx-auto object-contain">
-            </div>
-
-            <!-- Download Button -->
-            <div>
-                <a href="https://median.co/share/krkwrwz#apk" target="_blank" class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-sm transition-all shadow-sm">
-                    <i class="fa-solid fa-download"></i>
-                    Download Android APK
-                </a>
+            <!-- QR Code Graphic Only -->
+            <div class="p-2 inline-block">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=https://median.co/share/krkwrwz%23apk" alt="QR Code" class="w-56 h-56 mx-auto object-contain rounded-xl">
             </div>
 
         </div>

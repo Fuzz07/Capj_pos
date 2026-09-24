@@ -141,11 +141,11 @@
 
         <div class="dashed-line"></div>
 
-        <div class="no-print">
+        <div class="no-print" style="margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
             <button onclick="window.print()"
-                style="padding: 6px 12px; cursor: pointer; background: #18b318; color: white; border: none; border-radius: 4px;">Print</button>
+                style="padding: 8px 18px; cursor: pointer; background: #0d6efd; color: white; border: none; border-radius: 6px; font-weight: 600; font-size: 0.85rem;">Print</button>
             <a href="{{ route('orders.index') }}"
-                style="margin-left: 10px; font-size: 0.85rem; color: #666; text-decoration: none;">Back to Orders</a>
+                style="padding: 8px 18px; background: #198754; color: white; border: none; border-radius: 6px; font-weight: 600; font-size: 0.85rem; text-decoration: none; display: inline-block;">Back to Orders</a>
         </div>
     </div>
 

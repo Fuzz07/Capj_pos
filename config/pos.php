@@ -18,6 +18,6 @@ return [
         'client_secret' => env('GMAIL_CLIENT_SECRET'),
         'refresh_token' => env('GMAIL_REFRESH_TOKEN'),
         'admin_email' => env('ADMIN_EMAIL', 'admincapj@gmail.com'),
-        'admin_name' => env('ADMIN_NAME', 'Captain J Admin'),
+        'admin_name' => env('ADMIN_NAME', 'CAPTAiN J Admin'),
     ],
 ];

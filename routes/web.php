@@ -73,6 +73,7 @@ Route::middleware(['auth', 'single.session'])->group(function () {
 
         // Sales & Reports (owner view)
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/export-csv', [ReportController::class, 'exportCsv'])->name('reports.export-csv');
         // Admin-Only Inventory Actions
         Route::post('/inventory', [InventoryController::class, 'store'])->name('inventory.store');
         Route::put('/inventory/{inventory}', [InventoryController::class, 'update'])->name('inventory.update');
